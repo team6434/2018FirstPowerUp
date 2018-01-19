@@ -12,10 +12,12 @@ public class Robot extends IterativeRobot {
     Assistive_Climb assistive_climb;
     Climb climber;
     Joystick joystick;
+    Drivetrain drivetrain;
     @Override
     public void robotInit() {
         assistive_climb = new Assistive_Climb();
         climber = new Climb();
+        drivetrain = new Drivetrain();
         joystick = new Joystick(0);
     }
 
@@ -27,6 +29,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+        drivetrain.init();
     }
 
     @Override
@@ -41,9 +44,12 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        drivetrain.arcadeDrive(joystick.getX(), joystick.getY());
         if (joystick.getTrigger()) {
             climber.climb();
         }
+
+        drivetrain.showDashboard();
     }
 
     @Override

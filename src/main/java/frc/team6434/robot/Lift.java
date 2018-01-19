@@ -2,11 +2,12 @@ package frc.team6434.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Created by jwill on 1/17/2018.
  */
-public class Lift {
+public class Lift implements Subsystem{
 
     VictorSP liftMotor;
     DigitalInput liftLimitSwitchUpper, liftLimitSwitchLower;
@@ -38,4 +39,9 @@ public class Lift {
     public void goToPosition(double position) {
     }
 
+    public void showDashboard() {
+        SmartDashboard.putNumber("Lift Motor Speed", liftMotor.get());
+        SmartDashboard.putBoolean("Lift Motor Upper Limit", liftLimitSwitchUpper.get());
+        SmartDashboard.putBoolean("Lift Motor Lower Limit", liftLimitSwitchLower.get());
+    }
 }
