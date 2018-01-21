@@ -9,18 +9,25 @@ public class Assistive_Climb {
 
     VictorSP assistiveClimbMotorLeft, getAssistiveClimbMotorRight;
 
-    public void init(){
+    public void init()
+    {
         assistiveClimbMotorLeft = new VictorSP(9);
         getAssistiveClimbMotorRight = new VictorSP(10);
     }
 
-    public void leftRelease() {
+    public void leftRelease()
+    {
+        
     }
 
-    public void rightRelease() {
+    public void rightRelease()
+    {
+        
     }
 
-    public void bothRelease() {
+    public void bothRelease()
+    {
+        
     }
 
 }
