@@ -12,7 +12,8 @@ public class Lift implements Subsystem{
     VictorSP liftMotor;
     DigitalInput liftLimitSwitchUpper, liftLimitSwitchLower;
 
-    public void init(){
+    public void init()
+    {
         liftMotor = new VictorSP(4);
         liftLimitSwitchUpper = new DigitalInput(5);
         liftLimitSwitchLower = new DigitalInput(6);
@@ -28,7 +29,8 @@ public class Lift implements Subsystem{
         }
     }
 
-    public void moveDown() {
+    public void moveDown()
+    {
         if (liftLimitSwitchLower.get() == true){
             liftMotor.set(0);
         }
@@ -37,10 +39,13 @@ public class Lift implements Subsystem{
         }
     }
 
-    public void goToPosition(double position) {
+    public void goToPosition(double position)
+    {
+        
     }
 
-    public void showDashboard() {
+    public void showDashboard()
+    {
         SmartDashboard.putNumber("Lift Motor Speed", liftMotor.get());
         SmartDashboard.putBoolean("Lift Motor Upper Limit", liftLimitSwitchUpper.get());
         SmartDashboard.putBoolean("Lift Motor Lower Limit", liftLimitSwitchLower.get());
