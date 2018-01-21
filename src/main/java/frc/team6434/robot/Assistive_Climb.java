@@ -1,6 +1,7 @@
 package frc.team6434.robot;
 
 import edu.wpi.first.wpilibj.VictorSP;
+import frc.team6434.robot.constants;
 
 /**
  * Created by jwill on 1/17/2018.
@@ -8,8 +9,6 @@ import edu.wpi.first.wpilibj.VictorSP;
 public class Assistive_Climb {
 
     VictorSP assistiveClimbMotorLeft, getAssistiveClimbMotorRight;
-    
-    private double AMS = 0.5 //Assitive Motor Speed
 
     public void init()
     {
