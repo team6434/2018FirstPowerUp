@@ -14,5 +14,10 @@ public class Climb {
     {
         climberMotor.set(0.5);
     }
+    
+    public void reverseClimb()
+    {
+        climberMotor.set(-0.5);
+    }
 
 }
