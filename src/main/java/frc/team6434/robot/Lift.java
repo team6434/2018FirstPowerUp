@@ -18,7 +18,8 @@ public class Lift implements Subsystem{
         liftLimitSwitchLower = new DigitalInput(6);
     }
 
-    public void moveUp() {
+    public void moveUp() 
+    {
         if (liftLimitSwitchUpper.get() == true){
             liftMotor.set(0);
         }
