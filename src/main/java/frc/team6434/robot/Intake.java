@@ -48,6 +48,11 @@ public class Intake {
     {
         intakeMotor.set(-intakeSpeed);
     }
+    
+    public void showDashboard()
+    {
+        SmartDashboard.putBoolean("Intake Limit Switch", intakeLimitSwitch.get());
+    }
 
 
 }
