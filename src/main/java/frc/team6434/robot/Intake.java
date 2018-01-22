@@ -18,7 +18,8 @@ public class Intake {
 
     public void getCube()
     {
-        if (intakeLimitSwitch.get() == false) {
+        if (intakeLimitSwitch.get() == false)
+        {
             intakeMotor.set(1.0);
         }
         else{
@@ -28,14 +29,16 @@ public class Intake {
 
     public void ejectCubeFast()
     {
-        if (intakeLimitSwitch.get() == true) {
+        if (intakeLimitSwitch.get() == true)
+        {
             ejectCube(1.0);
         }
     }
 
     public void ejectCubeSlow()
     {
-        if (intakeLimitSwitch.get() == true) {
+        if (intakeLimitSwitch.get() == true)
+        {
             ejectCube(0.5);
         }
     }
