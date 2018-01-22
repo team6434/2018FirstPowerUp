@@ -22,7 +22,8 @@ public class Intake {
         {
             intakeMotor.set(1.0);
         }
-        else{
+        else
+        {
             intakeMotor.set(0);
         }
     }
