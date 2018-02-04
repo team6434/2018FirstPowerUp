@@ -49,7 +49,7 @@ public class Drivetrain implements Subsystem {
 
     public double read_gyro()
     {
-        return gyro.getAngle();
+        return gyro.getAngle()%360;
     }
 
     public void turnToAngle(double angle)
@@ -61,6 +61,9 @@ public class Drivetrain implements Subsystem {
         leftEncoder.reset();
         rightEncoder.reset();
     }
+    // Drives a set distance, assuming the encoders have been reset.
+    // Reset the encoders once the robot has reached a target to drive a set distance again
+    // Right now only uses left encoder, and doesn't use the gyro to drive straight
     public void driveDistance(double distance)
     {
         if (leftEncoder.get() > distance)
@@ -78,21 +81,35 @@ public class Drivetrain implements Subsystem {
             }
         }
     }
-    public void driveAngle(double angle, double speed)
+    // Turn on the spot to a set angle
+    public void turnToAngle(double angle, double speed)
     {
-        double currentAngle = read_gyro()%360;
-        if ((currentAngle - angle) > 5)
+        // Testing very basic proportional speed
+        //speed = Math.abs((read_gyro() - angle)/360);
+
+        if ((read_gyro() - angle) > 0.5)
         {
             // Turn left
             drive(-speed,speed);
         }
-        else if((currentAngle - angle < -5))
+        else if((read_gyro() - angle < -0.5))
         {
             // Turn right
             drive(speed,-speed);
         }
         else{
             drive(0,0);
+        }
+        SmartDashboard.putNumber("Speed", speed);
+    }
+    // Turns to a set angle then drives forward
+    public void driveAngle(double angle, double speed)
+    {
+        if (Math.abs(read_gyro() - angle) > 5) {
+            turnToAngle(angle, speed);
+        }
+        else{
+            drive(-speed,-speed);
         }
     }
 

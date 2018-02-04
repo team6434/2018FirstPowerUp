@@ -1,11 +1,9 @@
 package frc.team6434.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import frc.team6434.robot.Assistive_Climb;
-import frc.team6434.robot.Climb;
-import frc.team6434.robot.Drivetrain;
-import frc.team6434.robot.Intake;
 import edu.wpi.first.wpilibj.Joystick;
-import frc.team6434.robot.Lift;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.CameraServer;
+import javafx.scene.Camera;
 
 public class Robot extends IterativeRobot {
 
@@ -13,6 +11,7 @@ public class Robot extends IterativeRobot {
     Climb climber;
     Joystick joystick;
     Drivetrain drivetrain;
+    CameraServer cameraServer;
     @Override
     public void robotInit() {
         assistive_climb = new Assistive_Climb();
@@ -20,6 +19,11 @@ public class Robot extends IterativeRobot {
         drivetrain = new Drivetrain();
         joystick = new Joystick(0);
         drivetrain.init();
+        /*
+        Untested camera code
+        cameraServer = CameraServer.getInstance();
+        cameraServer.startAutomaticCapture();*/
+
     }
 
     @Override
@@ -46,23 +50,32 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic()
     {
-        drivetrain.driveAngle(180, 0.3);
+        drivetrain.turnToAngle(180, 0.3);
         drivetrain.showDashboard();
     }
 
     @Override
     public void teleopPeriodic() {
-        drivetrain.arcadeDrive(joystick.getX(), joystick.getY());
-        if (joystick.getTrigger()) {
+        /*if (joystick.getTrigger()) {
             climber.climb();
         }
-        if (joystick.getRawButton(12))
-        {
+        */
+        if (joystick.getRawButton(12)) {
             drivetrain.leftEncoder.reset();
             drivetrain.rightEncoder.reset();
         }
+        if (joystick.getPOV() != -1)
+        {
+            //drivetrain.turnToAngle(joystick.getPOV(), 0.5);
+            drivetrain.driveAngle(joystick.getPOV(), 0.6);
+        }
+        else
+        {
+            drivetrain.arcadeDrive(joystick.getX(), joystick.getY());
 
+        }
         drivetrain.showDashboard();
+        SmartDashboard.putNumber("POV", joystick.getPOV());
     }
 
     @Override
