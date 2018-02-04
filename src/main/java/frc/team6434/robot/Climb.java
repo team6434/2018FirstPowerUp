@@ -5,12 +5,19 @@ public class Climb {
 
     VictorSP climberMotor;
 
-    public void init() {
+    public void init()
+    {
         climberMotor = new VictorSP(11);
     }
 
-    public void climb() {
+    public void climb()
+    {
         climberMotor.set(0.5);
+    }
+    
+    public void reverseClimb()
+    {
+        climberMotor.set(-0.5);
     }
 
 }

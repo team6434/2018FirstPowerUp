@@ -2,10 +2,8 @@ package frc.team6434.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- * Created by jwill on 1/17/2018.
- */
 public class Intake {
 
     VictorSP intakeMotor;
@@ -16,29 +14,42 @@ public class Intake {
         intakeLimitSwitch = new DigitalInput(8);
     }
 
-    public void getCube() {
-        if (intakeLimitSwitch.get() == false) {
+    public void getCube()
+    {
+        if (intakeLimitSwitch.get() == false)
+        {
             intakeMotor.set(1.0);
         }
-        else{
+        else
+        {
             intakeMotor.set(0);
         }
     }
 
-    public void ejectCubeFast() {
-        if (intakeLimitSwitch.get() == true) {
+    public void ejectCubeFast()
+    {
+        if (intakeLimitSwitch.get() == true)
+        {
             ejectCube(1.0);
         }
     }
 
-    public void ejectCubeSlow() {
-        if (intakeLimitSwitch.get() == true) {
+    public void ejectCubeSlow()
+    {
+        if (intakeLimitSwitch.get() == true)
+        {
             ejectCube(0.5);
         }
     }
 
-    private void ejectCube(double intakeSpeed) {
+    private void ejectCube(double intakeSpeed)
+    {
         intakeMotor.set(-intakeSpeed);
+    }
+    
+    public void showDashboard()
+    {
+        SmartDashboard.putBoolean("Intake Limit Switch", intakeLimitSwitch.get());
     }
 
 

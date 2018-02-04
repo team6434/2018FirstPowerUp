@@ -17,8 +17,9 @@ public class Drivetrain implements Subsystem {
         rightA = new VictorSP(2);
         rightB = new VictorSP(3);
         leftEncoder = new Encoder(0,1);
+        leftEncoder.setDistancePerPulse(1);
         rightEncoder = new Encoder(2,3);
-        //leftEncoder.setDistancePerPulse(1);
+        rightEncoder.setDistancePerPulse(1);
         gyro = new ADXRS450_Gyro();
         gyro.calibrate();
     }
@@ -55,12 +56,53 @@ public class Drivetrain implements Subsystem {
     {
 
     }
+    public void resetEncoders()
+    {
+        leftEncoder.reset();
+        rightEncoder.reset();
+    }
+    public void driveDistance(double distance)
+    {
+        if (leftEncoder.get() > distance)
+        {
+            drive(-0.05,-0.05);
+        }
+        else
+        {
+            if (leftEncoder.get() < 0.7*distance)
+            {
+                drive(0.8,0.8);
+            }
+            else {
+                drive(0.3, 0.3);
+            }
+        }
+    }
+    public void driveAngle(double angle, double speed)
+    {
+        double currentAngle = read_gyro()%360;
+        if ((currentAngle - angle) > 5)
+        {
+            // Turn left
+            drive(-speed,speed);
+        }
+        else if((currentAngle - angle < -5))
+        {
+            // Turn right
+            drive(speed,-speed);
+        }
+        else{
+            drive(0,0);
+        }
+    }
 
     public void showDashboard()
     {
         SmartDashboard.putNumber("Gyro Angle", read_gyro());
         SmartDashboard.putNumber("Left Power", leftA.get());
         SmartDashboard.putNumber("Right Power", rightB.get());
+        SmartDashboard.putNumber("Left Encoder", leftEncoder.get());
+        SmartDashboard.putNumber("Right Encoder", rightEncoder.get());
 
     }
 

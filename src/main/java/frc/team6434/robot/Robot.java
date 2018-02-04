@@ -19,17 +19,21 @@ public class Robot extends IterativeRobot {
         climber = new Climb();
         drivetrain = new Drivetrain();
         joystick = new Joystick(0);
+        drivetrain.init();
     }
 
     @Override
     public void disabledInit() { }
 
     @Override
-    public void autonomousInit() { }
+    public void autonomousInit()
+    {
+        drivetrain.resetEncoders();
+    }
 
     @Override
     public void teleopInit() {
-        drivetrain.init();
+
     }
 
     @Override
@@ -40,13 +44,22 @@ public class Robot extends IterativeRobot {
     public void disabledPeriodic() { }
     
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic()
+    {
+        drivetrain.driveAngle(180, 0.3);
+        drivetrain.showDashboard();
+    }
 
     @Override
     public void teleopPeriodic() {
         drivetrain.arcadeDrive(joystick.getX(), joystick.getY());
         if (joystick.getTrigger()) {
             climber.climb();
+        }
+        if (joystick.getRawButton(12))
+        {
+            drivetrain.leftEncoder.reset();
+            drivetrain.rightEncoder.reset();
         }
 
         drivetrain.showDashboard();
