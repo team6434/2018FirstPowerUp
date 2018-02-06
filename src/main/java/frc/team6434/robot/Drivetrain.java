@@ -61,6 +61,12 @@ public class Drivetrain implements Subsystem {
         leftEncoder.reset();
         rightEncoder.reset();
     }
+
+    public void driveDistanceMilli(double milli)
+    {
+        driveDistance(milli/2.4);
+    }
+
     // Drives a set distance, assuming the encoders have been reset.
     // Reset the encoders once the robot has reached a target to drive a set distance again
     // Right now only uses left encoder, and doesn't use the gyro to drive straight
