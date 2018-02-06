@@ -52,6 +52,9 @@ public class Drivetrain implements Subsystem {
         return gyro.getAngle()%360;
     }
 
+    public void restGyro(){
+    }
+
     public void turnToAngle(double angle)
     {
 
@@ -62,7 +65,11 @@ public class Drivetrain implements Subsystem {
         rightEncoder.reset();
     }
 
-    public void driveDistanceMilli(double milli)
+    public double getEncoderLeft(){
+        return leftEncoder.get()*2.4;
+    }
+
+    public void driveDistanceMilli(int milli)
     {
         driveDistance(milli/2.4);
     }
