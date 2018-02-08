@@ -51,19 +51,23 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic()
     {
-        for(int i = 0; i < 4; i++) {
-            while (drivetrain.getEncoderLeft() < 1000 && flag == true) {
-                drivetrain.driveDistanceMilli(1100);
-            }
-            while (drivetrain.getEncoderLeft() > 1000 || flag == false) {
-                drivetrain.turnToAngle((i*90) + 90, 0.3);
-                flag = false;
-                if (drivetrain.read_gyro() > ((i*90) + 89) && drivetrain.read_gyro() < ((i*90) + 91)) {
-                    flag = true;
-                }
-            }
-            drivetrain.resetEncoders();
-        }
+
+//        drivetrain.driveStraight(0.3,10000);
+
+
+//        for(int i = 0; i < 4; i++) {
+//            while (drivetrain.getEncoderLeft() < 1000 && flag == true) {
+//                drivetrain.driveDistanceMilli(1100);
+//            }
+//            while (drivetrain.getEncoderLeft() > 1000 || flag == false) {
+//                drivetrain.turnToAngle((i*90) + 90, 0.3);
+//                flag = false;
+//                if (drivetrain.read_gyro() > ((i*90) + 89) && drivetrain.read_gyro() < ((i*90) + 91)) {
+//                    flag = true;
+//                }
+//            }
+//            drivetrain.resetEncoders();
+//        }
 
 
 

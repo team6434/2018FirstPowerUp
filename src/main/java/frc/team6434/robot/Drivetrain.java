@@ -1,10 +1,15 @@
 package frc.team6434.robot;
+
+import java.util.map;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain implements Subsystem {
+
+    double diff1 = leftEncoder.get - rightEncoder.get;
+//    double diffmap = map(diff1,-1000.0,1000.0,-1.0,1.0);
 
     ADXRS450_Gyro gyro;
     VictorSP leftA, leftB, rightA, rightB;
@@ -94,6 +99,14 @@ public class Drivetrain implements Subsystem {
             }
         }
     }
+
+//    public void driveStraight(double speed, int distance)
+//    {
+//
+//        drive(speed - diffmap, speed);
+//        driveDistanceMilli(distance);
+//    }
+
     // Turn on the spot to a set angle
     public void turnToAngle(double angle, double speed)
     {
