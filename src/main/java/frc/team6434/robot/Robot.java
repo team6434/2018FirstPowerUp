@@ -34,6 +34,8 @@ public class Robot extends IterativeRobot {
     public void autonomousInit()
     {
         drivetrain.resetEncoders();
+        drivetrain.gyroStraight(10,0.3);
+
     }
 
     @Override
@@ -51,6 +53,12 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic()
     {
+//        drivetrain.gyroStraight(10,0.3);
+
+//        drivetrain.driveDistanceMilli(2000);
+//        drivetrain.driveDistanceMilli(2000);
+
+
 
 //        drivetrain.driveStraight(0.3,10000);
 

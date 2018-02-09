@@ -1,6 +1,6 @@
 package frc.team6434.robot;
 
-import java.util.map;
+//import java.util.map;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -8,8 +8,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain implements Subsystem {
 
-    double diff1 = leftEncoder.get - rightEncoder.get;
+//    double diff1 = leftEncoder.get - rightEncoder.get;
 //    double diffmap = map(diff1,-1000.0,1000.0,-1.0,1.0);
+    boolean flagon = true;
+    double optangle = 0.0;
+
+//    double minus = leftEncoder.get() - rightEncoder.get();
 
     ADXRS450_Gyro gyro;
     VictorSP leftA, leftB, rightA, rightB;
@@ -76,7 +80,8 @@ public class Drivetrain implements Subsystem {
 
     public void driveDistanceMilli(int milli)
     {
-        driveDistance(milli/2.4);
+//        driveDistance(milli/2.4);
+        gyroStraight(milli/2.4,0.3);
     }
 
     // Drives a set distance, assuming the encoders have been reset.
@@ -106,6 +111,50 @@ public class Drivetrain implements Subsystem {
 //        drive(speed - diffmap, speed);
 //        driveDistanceMilli(distance);
 //    }
+
+//    public void driveStriaght (int distance)
+//    {
+//        if (leftEncoder.get() < rightEncoder.get())
+//        {
+//            drive(0.5,0.3)
+//        }
+//        else if (rightEncoder.get() < leftEncoder.get())
+//        {
+//
+//        }
+//        else
+//        {
+//
+//        }
+//    }
+
+
+    public void gyroStraight(double distance, double speed)
+    {
+        if (flagon){
+            flagon = false;
+            optangle = read_gyro();
+        }
+        double avg_dis = (leftEncoder.get());
+        while(avg_dis < distance)
+        {
+            if(optangle < read_gyro())
+            {
+                drive(speed*0.85, speed);
+            }
+            if(optangle > distance)
+            {
+                drive(speed, speed*0.85);
+            }
+            else
+            {
+                drive(speed,speed);
+            }
+        }
+        drive(0,0);
+    }
+
+
 
     // Turn on the spot to a set angle
     public void turnToAngle(double angle, double speed)
