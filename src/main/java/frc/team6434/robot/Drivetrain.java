@@ -150,6 +150,7 @@ public class Drivetrain implements Subsystem {
             {
                 drive(speed,speed);
             }
+            double avg_dis = (leftEncoder.get());
         }
         drive(0,0);
     }
