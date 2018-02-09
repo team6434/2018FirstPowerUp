@@ -142,7 +142,7 @@ public class Drivetrain implements Subsystem {
             {
                 drive(speed*0.85, speed);
             }
-            if(optangle > distance)
+            if(optangle > read_gyro())
             {
                 drive(speed, speed*0.85);
             }
