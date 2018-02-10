@@ -33,6 +33,8 @@ public class Drivetrain implements Subsystem {
         gyro.calibrate();
     }
 
+
+    //sets the speeds of all driving motors
     public void drive(double left, double right)
     {
         leftA.set(left);
@@ -40,6 +42,9 @@ public class Drivetrain implements Subsystem {
         rightA.set(-right);
         rightB.set(-right);
     }
+
+
+    //teleop driving stuff
     public void arcadeDrive(double x, double y)
     {
         double left = y+x;
@@ -56,33 +61,46 @@ public class Drivetrain implements Subsystem {
 
     }
 
-    public double read_gyro()
+
+    //
+    public double readGyro()
     {
-        return gyro.getAngle()%360;
+        return (gyro.getAngle()%360+360)%360;
     }
 
-    public void restGyro(){
-    }
 
-    public void turnToAngle(double angle)
-    {
 
-    }
+//    public void restGyro(){
+//    }
+
+//    public void turnToAngle(double angle)
+//    {
+//
+//    }
+
+
+    //resets both encoders
     public void resetEncoders()
     {
         leftEncoder.reset();
         rightEncoder.reset();
     }
 
-    public double getEncoderLeft(){
-        return leftEncoder.get()*2.4;
+
+    //returns average of both encoders (mil)
+    public double getEncoderAvg()
+    {
+        return (((rightEncoder.get()*2.4) + (leftEncoder.get()*2.4))/2);
     }
 
-    public void driveDistanceMilli(int milli)
+
+    //Drives a set distance in millimetres (roughly)
+    public void driveDistanceMilli(int milli, double speed)
     {
 //        driveDistance(milli/2.4);
-        gyroStraight(milli/2.4,0.3);
+        gyroStraight(milli/2.4,speed);
     }
+
 
     // Drives a set distance, assuming the encoders have been reset.
     // Reset the encoders once the robot has reached a target to drive a set distance again
@@ -104,6 +122,7 @@ public class Drivetrain implements Subsystem {
             }
         }
     }
+
 
 //    public void driveStraight(double speed, int distance)
 //    {
@@ -129,20 +148,21 @@ public class Drivetrain implements Subsystem {
 //    }
 
 
+    //drives straight using gyro
     public void gyroStraight(double distance, double speed)
     {
         if (flagon){
             flagon = false;
-            optangle = read_gyro();
+            optangle = readGyro();
         }
-        double avg_dis = (leftEncoder.get());
+        double avg_dis = (getEncoderAvg());
         while(avg_dis < distance)
         {
-            if(optangle < read_gyro())
+            if(optangle < readGyro())
             {
                 drive(speed*0.85, speed);
             }
-            if(optangle > read_gyro())
+            if(optangle > readGyro())
             {
                 drive(speed, speed*0.85);
             }
@@ -150,38 +170,107 @@ public class Drivetrain implements Subsystem {
             {
                 drive(speed,speed);
             }
-            double avg_dis = (leftEncoder.get());
+            avg_dis = (getEncoderAvg());
         }
         drive(0,0);
     }
 
 
+//    // Turn on the spot to a set angle
+//    public void turnToAngle(double angle, double speed)
+//    {
+//        // Testing very basic proportional speed
+//        //speed = Math.abs((readGyro() - angle)/360);
+//
+////        if(angle < 180)
+////        {
+////            drive(-speed,speed);
+////        }
+////        else if (angle >= 181)
+////        {
+////            drive(speed,-speed);
+////        }
+////        else
+////        {
+////            drive(0,0);
+////        }
+//       SmartDashboard.putNumber("Error", speed);
+//        if ((readGyro() - angle) > 180 || (readGyro() - angle <= -180))
+//        {
+//            // Turn left
+//            drive(-speed,speed);
+//        }
+//        /*else if((readGyro() - angle >= -180))
+//        {
+//            // Turn right
+//            drive(speed,-speed);
+//        }*/
+//        else{
+//            //drive(0,0);
+//            drive(speed,-speed);
+//        }
+//        SmartDashboard.putNumber("Speed", speed);
+//    }
+
 
     // Turn on the spot to a set angle
-    public void turnToAngle(double angle, double speed)
+    public void turnToAngle (double angle, double speed)
     {
-        // Testing very basic proportional speed
-        //speed = Math.abs((read_gyro() - angle)/360);
+        showDashboard();
 
-        if ((read_gyro() - angle) > 0.5)
+        double target = angle;
+        double current = readGyro();
+
+        double left = current - target;
+        double right = target - current;
+
+        if(left < right) //go left
         {
-            // Turn left
-            drive(-speed,speed);
+            while(current != target)
+            {
+                if(readGyro() < target)
+                {
+                    drive(-speed*0.85, speed);
+                }
+                else if(readGyro() > target)
+                {
+                    drive(speed, -speed*0.85);
+                }
+            }
+            if(current == target)
+            {
+                drive(0,0);
+            }
         }
-        else if((read_gyro() - angle < -0.5))
+        else if (right < left) // go right
         {
-            // Turn right
-            drive(speed,-speed);
+            while(readGyro() != target)
+            {
+                if(readGyro() > target)
+                {
+                    drive(speed, -speed*0.85);
+                }
+                else if(readGyro() < target)
+                {
+                    drive(-speed*0.85, speed);
+                }
+            }
+            if(current == target)
+            {
+                drive(0,0);
+            }
         }
-        else{
+        else
+        {
             drive(0,0);
         }
-        SmartDashboard.putNumber("Speed", speed);
     }
+
+
     // Turns to a set angle then drives forward
     public void driveAngle(double angle, double speed)
     {
-        if (Math.abs(read_gyro() - angle) > 5) {
+        if (Math.abs(readGyro() - angle) > 10) {
             turnToAngle(angle, speed);
         }
         else{
@@ -189,9 +278,11 @@ public class Drivetrain implements Subsystem {
         }
     }
 
+
+    //put dashboard stuff here
     public void showDashboard()
     {
-        SmartDashboard.putNumber("Gyro Angle", read_gyro());
+        SmartDashboard.putNumber("Gyro Angle", readGyro());
         SmartDashboard.putNumber("Left Power", leftA.get());
         SmartDashboard.putNumber("Right Power", rightB.get());
         SmartDashboard.putNumber("Left Encoder", leftEncoder.get());

@@ -34,7 +34,8 @@ public class Robot extends IterativeRobot {
     public void autonomousInit()
     {
         drivetrain.resetEncoders();
-        drivetrain.gyroStraight(10,0.3);
+//        drivetrain.gyroStraight(10000,0.3);
+//        drivetrain.driveDistanceMilli(10000,0.3);
 
     }
 
@@ -53,6 +54,9 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic()
     {
+
+        drivetrain.turnToAngle(90,0.5);
+
 //        drivetrain.gyroStraight(10,0.3);
 
 //        drivetrain.driveDistanceMilli(2000);
@@ -79,9 +83,8 @@ public class Robot extends IterativeRobot {
 
 
 
-//        if(drivetrain.getEncoderLeft() < 2000) {
-//            drivetrain.driveDistanceMilli(2500);
-//            drivetrain.turnToAngle(300,0.3);
+//        if(drivetrain.getEncoderAvg() < 2000) {
+//            drivetrain.driveDistanceMilli(10000, 0.3);
 //            drivetrain.showDashboard();
 //        }
 //        else{
@@ -103,7 +106,7 @@ public class Robot extends IterativeRobot {
         if (joystick.getPOV() != -1)
         {
             //drivetrain.turnToAngle(joystick.getPOV(), 0.5);
-            drivetrain.driveAngle(joystick.getPOV(), 0.6);
+            drivetrain.driveAngle(joystick.getPOV(), 0.4);
         }
         else
         {
