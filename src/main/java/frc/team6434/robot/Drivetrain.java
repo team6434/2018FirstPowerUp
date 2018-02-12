@@ -212,7 +212,39 @@ public class Drivetrain implements Subsystem {
 //        SmartDashboard.putNumber("Speed", speed);
 //    }
 
-
+    public void turnToAngle (double angle, double speed, boolean bool)
+    {
+        int target = angle;
+        int current = readGryo();
+        
+        boolean direction = true
+        
+        int leftSteps = 0;
+        int rightSteps = 0;
+        
+        for(int i = current; (i%360 + 360)%360) != target; i--, leftSteps++){}
+        for(int i = current; (i%360 + 360)%360) != target; i++, rightSteps++){}
+        
+        if(leftSteps > rightSteps)
+            direction = false;
+        else
+            direction = true;
+        
+        if(direction){
+            //do turning left routine here
+            while(readGyro() > angle + 5 && readGryo() < angle - 5){
+                
+            }
+        }
+        else{
+            //do turning right routine here
+            while(readGyro() > angle + 5 && readGryo() < angle - 5){
+                
+            }
+        }
+    }
+    
+    
     // Turn on the spot to a set angle
     public void turnToAngle (double angle, double speed)
     {
