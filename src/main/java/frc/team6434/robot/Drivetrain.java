@@ -123,31 +123,6 @@ public class Drivetrain implements Subsystem {
         }
     }
 
-
-//    public void driveStraight(double speed, int distance)
-//    {
-//
-//        drive(speed - diffmap, speed);
-//        driveDistanceMilli(distance);
-//    }
-
-//    public void driveStriaght (int distance)
-//    {
-//        if (leftEncoder.get() < rightEncoder.get())
-//        {
-//            drive(0.5,0.3)
-//        }
-//        else if (rightEncoder.get() < leftEncoder.get())
-//        {
-//
-//        }
-//        else
-//        {
-//
-//        }
-//    }
-
-
     //drives straight using gyro
     public void gyroStraight(double distance, double speed)
     {       
