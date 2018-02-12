@@ -99,20 +99,35 @@ public class Robot extends IterativeRobot {
             climber.climb();
         }
         */
-        if (joystick.getRawButton(12)) {
+
+        if (joystick.getRawButton(9))
+        {
+            intake.getCubeTest(0.2);
+        }
+
+        if (joystick.getRawButton(10))
+        {
+            intake.ejectCubeTest(0.2);
+        }
+
+        if (joystick.getRawButton(12))
+        {
             drivetrain.leftEncoder.reset();
             drivetrain.rightEncoder.reset();
         }
+
         if (joystick.getPOV() != -1)
         {
             //drivetrain.turnToAngle(joystick.getPOV(), 0.5);
             drivetrain.driveAngle(joystick.getPOV(), 0.4);
         }
+
         else
         {
             drivetrain.arcadeDrive(joystick.getX(), joystick.getY());
 
         }
+
         drivetrain.showDashboard();
         SmartDashboard.putNumber("POV", joystick.getPOV());
     }

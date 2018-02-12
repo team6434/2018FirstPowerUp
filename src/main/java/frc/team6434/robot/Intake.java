@@ -6,46 +6,61 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake {
 
-    VictorSP intakeMotor;
+    VictorSP intakeMotorLeft, intakeMotorRight;
     DigitalInput intakeLimitSwitch;
 
     public void init(){
-        intakeMotor = new VictorSP(7);
-        intakeLimitSwitch = new DigitalInput(8);
+        intakeMotorLeft = new VictorSP(7);
+        intakeMotorRight = new VictorSP(8);
+        intakeLimitSwitch = new DigitalInput(0);
     }
 
-    public void getCube()
+//    public void getCube()
+//    {
+//        if (intakeLimitSwitch.get() == false)
+//        {
+//            intakeMotor.set(1.0);
+//        }
+//        else
+//        {
+//            intakeMotor.set(0);
+//        }
+//    }
+
+//    public void ejectCubeFast()
+//    {
+//        if (intakeLimitSwitch.get() == true)
+//        {
+//            ejectCube(1.0);
+//        }
+//    }
+//
+//    public void ejectCubeSlow()
+//    {
+//        if (intakeLimitSwitch.get() == true)
+//        {
+//            ejectCube(0.5);
+//        }
+//    }
+
+
+    public void getCubeTest(double speed)
     {
-        if (intakeLimitSwitch.get() == false)
-        {
-            intakeMotor.set(1.0);
-        }
-        else
-        {
-            intakeMotor.set(0);
-        }
+        intakeMotorLeft.set(-speed);
+        intakeMotorRight.set(speed);
     }
 
-    public void ejectCubeFast()
+    public void ejectCubeTest(double speed)
     {
-        if (intakeLimitSwitch.get() == true)
-        {
-            ejectCube(1.0);
-        }
+        intakeMotorLeft.set(speed);
+        intakeMotorRight.set(-speed);
     }
 
-    public void ejectCubeSlow()
-    {
-        if (intakeLimitSwitch.get() == true)
-        {
-            ejectCube(0.5);
-        }
-    }
-
-    private void ejectCube(double intakeSpeed)
-    {
-        intakeMotor.set(-intakeSpeed);
-    }
+//    private void ejectCube(double speed)
+//    {
+//        intakeMotorLeft.set(speed);
+//        intakeMotorRight.set(-speed);
+//    }
     
     public void showDashboard()
     {
