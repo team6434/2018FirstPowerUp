@@ -217,11 +217,21 @@ public class Drivetrain implements Subsystem {
         int target = angle;
         int current = readGryo();
         
-        boolean direction = true
+        //placeholders to insert data
+        boolean direction = true;
         
         int leftSteps = 0;
         int rightSteps = 0;
         
+        //sensitivit settings so you can change all 4 instances of it at once
+        double firstSensitivity = 0.85;
+        double secondSensitivity = 0.5;
+        
+        //count steps needed to reach either target in order to determine where to go
+        /*
+        this is not the best way to do this as it has to brute force
+        it but works well and count is below 360 both times
+        */
         for(int i = current; (i%360 + 360)%360) != target; i--, leftSteps++){}
         for(int i = current; (i%360 + 360)%360) != target; i++, rightSteps++){}
         
@@ -232,16 +242,30 @@ public class Drivetrain implements Subsystem {
         
         if(direction){
             //do turning left routine here
-            while(readGyro() > angle + 5 && readGryo() < angle - 5){
-                
+            while(current > angle + 5 && current < angle - 5){
+                if(abs(current - angle) > 90)
+                    drive(speed, -speed);
+                if(abs(current - angle) =< 90 && abs(current - angle) > 30)
+                    drive(speed * firstSensitivity, -speed * firstSensitivity);
+                if(abs(current - angle) =< 30)
+                    drive(speed * secondSensitivity, -speed * secondSensitivity);
+                current = readGryo();
             }
         }
         else{
             //do turning right routine here
-            while(readGyro() > angle + 5 && readGryo() < angle - 5){
-                
+            while(current > angle + 5 && current < angle - 5){
+                if(abs(current - angle) > 90)
+                    drive(-speed, speed);
+                if(abs(current - angle) =< 90 && abs(current - angle) > 30)
+                    drive(-speed * firstSensitivity, speed * firstSensitivity);
+                if(abs(current - angle) =< 30)
+                    drive(-speed * secondSensitivity, speed * secondSensitivity);
+                current = readGryo();
             }
         }
+        //stop at end of turn
+        drive(0,0);
     }
     
     
