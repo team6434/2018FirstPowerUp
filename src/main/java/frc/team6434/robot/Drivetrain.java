@@ -150,7 +150,11 @@ public class Drivetrain implements Subsystem {
 
     //drives straight using gyro
     public void gyroStraight(double distance, double speed)
-    {
+    {       
+        //sensitivit settings so you can change all 4 instances of it at once
+        const double firstSensitivity = 0.85;
+        const double secondSensitivity = 0.5;
+        
         if (flagon){
             flagon = false;
             optangle = readGyro();
@@ -158,20 +162,31 @@ public class Drivetrain implements Subsystem {
         double avg_dis = (getEncoderAvg());
         while(avg_dis < distance)
         {
-            if(optangle < readGyro())
-            {
-                drive(speed*0.85, speed);
-            }
-            if(optangle > readGyro())
-            {
-                drive(speed, speed*0.85);
-            }
-            else
-            {
-                drive(speed,speed);
-            }
+//             if(optangle < readGyro())
+//             {
+//                 drive(speed*0.85, speed);
+//             }
+//             if(optangle > readGyro())
+//             {
+//                 drive(speed, speed*0.85);
+//             }
+//             else
+//             {
+//                 drive(speed,speed);
+//             }            
+            if(optangle - readGyro() < 10 && optangle - readGyro() > 0)
+                drive(speed * firstSensitivity, speed);
+            if(optangle - readGyro() => 10)
+                drive(speed * secondSensitivity, speed);
+            if(optangle - readGyro() > 10 && optangle - readGyro() < 0)
+                drive(speed, speed * firstSensitivity);
+            if(optangle - readGyro() =< 10)
+                drive(speed, speed * secondSensitivity);
+            if(optangle - readGyro() == 0)
+                drive(speed, speed);
             avg_dis = (getEncoderAvg());
         }
+        //stop at end of routine
         drive(0,0);
     }
 
@@ -214,6 +229,7 @@ public class Drivetrain implements Subsystem {
 
     public void turnToAngle (double angle, double speed, boolean bool)
     {
+        showDashboard();
         int target = angle;
         int current = readGryo();
         
@@ -243,31 +259,36 @@ public class Drivetrain implements Subsystem {
         if(direction){
             //do turning left routine here
             while(current > angle + 5 && current < angle - 5){
-                if(abs(current - angle) > 90)
+                if((current - angle) > 90)
                     drive(speed, -speed);
-                if(abs(current - angle) =< 90 && abs(current - angle) > 30)
+                if((current - angle) =< 90 && (current - angle) > 30)
                     drive(speed * firstSensitivity, -speed * firstSensitivity);
-                if(abs(current - angle) =< 30)
+                if((current - angle) =< 30 && (current - angle) > 0)
                     drive(speed * secondSensitivity, -speed * secondSensitivity);
+                if((current - angle > 0)
+                    drive(-speed * secondSensitivity, speed * secondSensitivity);
                 current = readGryo();
+                showDashboard();
             }
         }
         else{
             //do turning right routine here
             while(current > angle + 5 && current < angle - 5){
-                if(abs(current - angle) > 90)
+                if((current - angle) < 90)
                     drive(-speed, speed);
-                if(abs(current - angle) =< 90 && abs(current - angle) > 30)
+                if((current - angle) =< 90 && (current - angle) > 30)
                     drive(-speed * firstSensitivity, speed * firstSensitivity);
-                if(abs(current - angle) =< 30)
+                if((current - angle) =< 30 && (current - angle) > 0)
                     drive(-speed * secondSensitivity, speed * secondSensitivity);
+                if((current - angle) < 0)
+                    drive(speed * secondSensitivity, -speed * secondSensitivity);
                 current = readGryo();
+                showDashboard();
             }
         }
         //stop at end of turn
         drive(0,0);
     }
-    
     
     // Turn on the spot to a set angle
     public void turnToAngle (double angle, double speed)
@@ -279,7 +300,7 @@ public class Drivetrain implements Subsystem {
 
         double left = current - target;
         double right = target - current;
-
+    
         if(left < right) //go left
         {
             while(current != target)
