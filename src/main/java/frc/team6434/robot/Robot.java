@@ -13,6 +13,8 @@ public class Robot extends IterativeRobot {
     Joystick joystick;
     Drivetrain drivetrain;
     CameraServer cameraServer;
+    Intake intake;
+    Lift lift;
     @Override
     public void robotInit() {
         assistive_climb = new Assistive_Climb();
@@ -20,11 +22,10 @@ public class Robot extends IterativeRobot {
         drivetrain = new Drivetrain();
         joystick = new Joystick(0);
         drivetrain.init();
-        /*
-        Untested camera code
-        cameraServer = CameraServer.getInstance();
-        cameraServer.startAutomaticCapture();*/
-
+        intake = new Intake();
+        lift = new Lift();
+        lift.init();
+        intake.init();
     }
 
     @Override
@@ -33,6 +34,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit()
     {
+        drivetrain.resetGyro();
         drivetrain.resetEncoders();
 //        drivetrain.gyroStraight(10000,0.3);
 //        drivetrain.driveDistanceMilli(10000,0.3);
@@ -40,7 +42,8 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void teleopInit() {
+    public void teleopInit()
+    {
 
     }
 
@@ -55,7 +58,11 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic()
     {
 
-        drivetrain.turnToAngle(90,0.5);
+        lift.showDashboard();
+        intake.showDashboard();
+        drivetrain.showDashboard();
+
+        drivetrain.turnToAngle(-500,0.5);
 
 //        drivetrain.gyroStraight(10,0.3);
 
@@ -95,37 +102,50 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        /*if (joystick.getTrigger()) {
-            climber.climb();
-        }
-        */
+
+        lift.showDashboard();
+        intake.showDashboard();
+        drivetrain.showDashboard();
+        SmartDashboard.putNumber("Throttle", joystick.getThrottle());
+
+        drivetrain.arcadeDrive(joystick.getX(), joystick.getY());
+
+
+
+
+        double speed = (joystick.getThrottle()+1)/2; //Throttle between 0 and 1
 
         if (joystick.getRawButton(9))
         {
-            intake.getCubeTest(0.2);
+            intake.getCube(speed/2);
         }
-
-        if (joystick.getRawButton(10))
+        else if (joystick.getRawButton(10))
         {
-            intake.ejectCubeTest(0.2);
+            intake.ejectCube(speed/2);
+        }
+        else
+        {
+            intake.ejectCube(0);
         }
 
-        if (joystick.getRawButton(12))
+        if (joystick.getRawButton(11))
+        {
+            lift.moveUp(speed/1);
+        }
+        else if (joystick.getRawButton(12))
+        {
+            lift.moveDown(speed/1);
+        }
+        else
+        {
+            lift.stop();
+        }
+
+
+        if (joystick.getRawButton(7))
         {
             drivetrain.leftEncoder.reset();
             drivetrain.rightEncoder.reset();
-        }
-
-        if (joystick.getPOV() != -1)
-        {
-            //drivetrain.turnToAngle(joystick.getPOV(), 0.5);
-            drivetrain.driveAngle(joystick.getPOV(), 0.4);
-        }
-
-        else
-        {
-            drivetrain.arcadeDrive(joystick.getX(), joystick.getY());
-
         }
 
         drivetrain.showDashboard();
