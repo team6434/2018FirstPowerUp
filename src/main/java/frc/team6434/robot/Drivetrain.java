@@ -41,8 +41,8 @@ public class Drivetrain implements Subsystem {
 
     //teleop driving stuff
     public void arcadeDrive(double x, double y) {
-        double left = y + x;
-        double right = y - x;
+        double left = y - x;
+        double right = y + x;
         if (left > 1) {
             left = 1;
         }
@@ -107,7 +107,8 @@ public class Drivetrain implements Subsystem {
     }
 
     //drives straight using gyro
-    public void gyroStraight(double distance, double speed) { /*
+    public void gyroStraight(double distance, double speed)
+    {
         //sensitivit settings so you can change all 4 instances of it at once
         final double firstSensitivity = 0.85;
         final double secondSensitivity = 0.5;
@@ -132,18 +133,18 @@ public class Drivetrain implements Subsystem {
 //             }            
             if (optangle - readGyro() < 10 && optangle - readGyro() > 0)
                 drive(speed * firstSensitivity, speed);
-            if (optangle - readGyro() =>10)
+            if (optangle - readGyro() >= 10)
             drive(speed * secondSensitivity, speed);
             if (optangle - readGyro() > 10 && optangle - readGyro() < 0)
                 drive(speed, speed * firstSensitivity);
-            if (optangle - readGyro() =<10)
+            if (optangle - readGyro() <= 10)
             drive(speed, speed * secondSensitivity);
             if (optangle - readGyro() == 0)
                 drive(speed, speed);
             avg_dis = (getEncoderAvg());
         }
         //stop at end of routine
-        drive(0, 0); */
+        drive(0, 0);
     }
 
 

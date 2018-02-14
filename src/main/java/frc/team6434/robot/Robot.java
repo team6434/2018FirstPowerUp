@@ -57,7 +57,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic()
     {
-
         lift.showDashboard();
         intake.showDashboard();
         drivetrain.showDashboard();
@@ -108,12 +107,13 @@ public class Robot extends IterativeRobot {
         drivetrain.showDashboard();
         SmartDashboard.putNumber("Throttle", joystick.getThrottle());
 
+
         drivetrain.arcadeDrive(joystick.getX(), joystick.getY());
 
 
 
-
         double speed = (joystick.getThrottle()+1)/2; //Throttle between 0 and 1
+
 
         if (joystick.getRawButton(9))
         {
@@ -121,34 +121,27 @@ public class Robot extends IterativeRobot {
         }
         else if (joystick.getRawButton(10))
         {
-            intake.ejectCube(speed/2);
+            intake.ejectCube(speed);
         }
         else
         {
-            intake.ejectCube(0);
+            intake.keepCube(0.2);
         }
 
-        if (joystick.getRawButton(11))
+
+        if (joystick.getRawButton(11)) //Lift up
         {
-            lift.moveUp(speed/1);
+            lift.moveLift(speed);
         }
-        else if (joystick.getRawButton(12))
+        else if (joystick.getRawButton(12)) //Lift down
         {
-            lift.moveDown(speed/1);
+            lift.moveLift(-speed);
         }
         else
         {
-            lift.stop();
+            lift.liftStop();
         }
 
-
-        if (joystick.getRawButton(7))
-        {
-            drivetrain.leftEncoder.reset();
-            drivetrain.rightEncoder.reset();
-        }
-
-        drivetrain.showDashboard();
         SmartDashboard.putNumber("POV", joystick.getPOV());
     }
 

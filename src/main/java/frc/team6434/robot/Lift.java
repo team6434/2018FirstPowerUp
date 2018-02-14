@@ -19,18 +19,14 @@ public class Lift implements Subsystem{
         liftLimitSwitchLower = new DigitalInput(6);
     }
 
-    public void moveUp(double speed)
+    //Move Lift (negative is up)
+    public void moveLift(double speed)
     {
         liftMotor.set(-speed);
     }
 
-    public void moveDown(double speed)
-    {
-        liftMotor.set(speed);
-    }
-
-
-    public void stop ()
+    //Stop lift motor
+    public void liftStop ()
     {
         liftMotor.set(0);
     }
