@@ -31,3 +31,27 @@ class Straight extends Command{
         return false;
     }
 }
+
+class Turn extends Command{
+
+    final double targetAngle;
+    final double speed;
+    final double tolerance = 10;
+
+    Turn(double targetAngle, double speed) {
+        this.targetAngle = targetAngle;
+        this.speed = speed;
+    }
+    void begin(Drivetrain drivetrain) {
+
+    }
+    boolean progress(Drivetrain drivetrain) {
+        double error = drivetrain.calculateError(targetAngle);
+        if ((error  >  - tolerance) && (error  <  tolerance)) {
+            return true;
+        }
+
+        drivetrain.turnToAngle(targetAngle, speed);
+        return false;
+    }
+}
