@@ -8,7 +8,7 @@ public class Assistive_Climb {
     private VictorSP assistiveClimbMotorLeft, getAssistiveClimbMotorLeft;
     private VictorSP assistiveClimbMotorRight, getAssistiveClimbMotorRight;
 
-    double AMS = 0.5;
+    double AMS = constants.AMS;
 
     public void init()
     {

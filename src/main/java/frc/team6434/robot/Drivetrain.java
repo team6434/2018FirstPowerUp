@@ -80,14 +80,14 @@ public class Drivetrain implements Subsystem {
 
     //returns average of both encoders (mil)
     public double getEncoderAvg() {
-        return (((rightEncoder.get() * 2.4) + (leftEncoder.get() * 2.4)) / 2);
+        return - constants.encoderRatio * (((rightEncoder.get()) + (leftEncoder.get())) / 2);
     }
 
 
     //Drives a set distance in millimetres (roughly)
-    public void driveDistanceMilli(int milli, double speed) {
+    public void driveDistanceMilli(int milli, double speed, double targetAngle) {
 //        driveDistance(milli/2.4);
-        gyroStraight(milli / 2.4, speed);
+        gyroStraight(milli / 2.4, speed, targetAngle);
     }
 
 
@@ -106,8 +106,39 @@ public class Drivetrain implements Subsystem {
         }
     }
 
+
+
     //drives straight using gyro
-    public void gyroStraight(double distance, double speed)
+    public void driveStraight(double speed, double targetAngle)
+    {
+        //sensitivit settings so you can change all 4 instances of it at once
+        final double firstSensitivity = 0.85;
+        final double secondSensitivity = 0.5;
+
+
+        SmartDashboard.putNumber("Gyro Angle", readGyro());
+        SmartDashboard.putNumber("Encoder Average", getEncoderAvg());
+        double error = calculateError(targetAngle);
+        if (error < -10) {
+            drive(speed, speed * secondSensitivity);
+        }
+        else if (error < 0)
+        {
+            drive(speed, speed * firstSensitivity);
+        }
+        else if (error < 10)
+        {
+            drive(speed * firstSensitivity, speed);
+        }
+        else
+        {
+            drive(speed * secondSensitivity, speed);
+        }
+
+    }
+
+    //drives straight using gyro
+    public void gyroStraight(double distance, double speed, double targetAngle)
     {
         //sensitivit settings so you can change all 4 instances of it at once
         final double firstSensitivity = 0.85;
@@ -117,8 +148,27 @@ public class Drivetrain implements Subsystem {
             flagon = false;
             optangle = readGyro();
         }
-        double avg_dis = (getEncoderAvg());
-        while (avg_dis < distance) {
+        resetEncoders();
+        double avg_dis;
+        while ((avg_dis = getEncoderAvg()) < distance) {
+            SmartDashboard.putNumber("Gyro Angle", readGyro());
+            SmartDashboard.putNumber("Encoder Average", getEncoderAvg());
+            double error = calculateError(targetAngle);
+                if (error < -10) {
+                drive(speed, speed * secondSensitivity);
+            }
+            else if (error < 0)
+            {
+                drive(speed, speed * firstSensitivity);
+            }
+            else if (error < 10)
+            {
+                drive(speed * firstSensitivity, speed);
+            }
+            else
+            {
+                drive(speed * secondSensitivity, speed);
+            }
 //             if(optangle < readGyro())
 //             {
 //                 drive(speed*0.85, speed);
@@ -131,45 +181,49 @@ public class Drivetrain implements Subsystem {
 //             {
 //                 drive(speed,speed);
 //             }            
-            if (optangle - readGyro() < 10 && optangle - readGyro() > 0)
-                drive(speed * firstSensitivity, speed);
-            if (optangle - readGyro() >= 10)
-            drive(speed * secondSensitivity, speed);
-            if (optangle - readGyro() > 10 && optangle - readGyro() < 0)
-                drive(speed, speed * firstSensitivity);
-            if (optangle - readGyro() <= 10)
-            drive(speed, speed * secondSensitivity);
-            if (optangle - readGyro() == 0)
-                drive(speed, speed);
-            avg_dis = (getEncoderAvg());
+//            if (error < 10 && error > 0)
+//                drive(speed * firstSensitivity, speed);
+//            if (optangle - readGyro() >= 10)
+//            drive(speed * secondSensitivity, speed);
+//            if (optangle - readGyro() > 10 && optangle - readGyro() < 0)
+//                drive(speed, speed * firstSensitivity);
+//            if (optangle - readGyro() <= 10)
+//            drive(speed, speed * secondSensitivity);
+//            if (optangle - readGyro() == 0)
+//                drive(speed, speed);
         }
         //stop at end of routine
+
         drive(0, 0);
+
+    }
+
+
+    public double calculateError(double targetAngle)
+    {
+        double error = readGyro() - targetAngle;
+
+        while (error > 180) {
+            error = error - 360;
+        }
+
+        while (error < -180) {
+            error = error + 360;
+        }
+        return error;
     }
 
 
     public void turnToAngle(double targetAngle, double speed)
     {
-
-        double error = readGyro() - targetAngle;
-
-        while(error > 180)
-        {
-            error = error - 360;
-        }
-
-        while(error < -180)
-        {
-            error = error + 360;
-        }
-
+        double error = calculateError(targetAngle);
         if(error > 0)
         {
-            drive(-speed*0.85, speed);
+            drive(-speed, speed);
         }
         else
         {
-            drive(speed, -speed*0.85);
+            drive(speed, -speed);
         }
         this.lastError = error;
     }
@@ -180,8 +234,8 @@ public class Drivetrain implements Subsystem {
         SmartDashboard.putNumber("Gyro Angle", readGyro());
         SmartDashboard.putNumber("Left Power", left.get());
         SmartDashboard.putNumber("Right Power", right.get());
-        SmartDashboard.putNumber("Left Encoder", leftEncoder.get());
-        SmartDashboard.putNumber("Right Encoder", rightEncoder.get());
+        SmartDashboard.putNumber("Left Encoder", -leftEncoder.get() * constants.encoderRatio);
+        SmartDashboard.putNumber("Right Encoder", -rightEncoder.get() * constants.encoderRatio);
         SmartDashboard.putNumber("Error", lastError);
 
 

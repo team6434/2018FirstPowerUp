@@ -7,6 +7,9 @@ import javafx.scene.Camera;
 
 public class Robot extends IterativeRobot {
 
+    Command[] currentStrategy;
+    int currentStep;
+
     boolean flag = true;
     Assistive_Climb assistive_climb;
     Climb climber;
@@ -15,6 +18,7 @@ public class Robot extends IterativeRobot {
     CameraServer cameraServer;
     Intake intake;
     Lift lift;
+    Strategy strategy;
     @Override
     public void robotInit() {
         assistive_climb = new Assistive_Climb();
@@ -24,6 +28,7 @@ public class Robot extends IterativeRobot {
         drivetrain.init();
         intake = new Intake();
         lift = new Lift();
+        strategy = new Strategy();
         lift.init();
         intake.init();
     }
@@ -36,10 +41,82 @@ public class Robot extends IterativeRobot {
     {
         drivetrain.resetGyro();
         drivetrain.resetEncoders();
-//        drivetrain.gyroStraight(10000,0.3);
-//        drivetrain.driveDistanceMilli(10000,0.3);
 
+        // We should receive information from the game: switch color
+        // We should receive information from the dashboard? (starting position)
+
+        // choose a strategy
+        currentStrategy = strategy.strategyLeftRed();
+        currentStep = 0;
+        currentStrategy[currentStep].begin(drivetrain);
     }
+
+    @Override
+    public void autonomousPeriodic()
+    {
+        drivetrain.showDashboard();
+        if (currentStep < currentStrategy.length) {
+            if (currentStrategy[currentStep].progress(drivetrain)) {
+                currentStep = currentStep + 1;
+                if (currentStep < currentStrategy.length)
+                {
+                    currentStrategy[currentStep].begin(drivetrain);
+                }
+                else
+                {
+                    drivetrain.drive(0, 0); // Stop
+                }
+            }
+        }
+
+
+       //  strategy.runStrategyLeftRed();
+
+
+
+
+//        lift.showDashboard();
+//        intake.showDashboard();
+//        drivetrain.showDashboard();
+//
+//        drivetrain.turnToAngle(-500,0.5);
+//
+////        drivetrain.gyroStraight(10,0.3);
+//
+////        drivetrain.driveDistanceMilli(2000);
+////        drivetrain.driveDistanceMilli(2000);
+//
+//
+//
+////        drivetrain.driveStraight(0.3,10000);
+//
+//
+////        for(int i = 0; i < 4; i++) {
+////            while (drivetrain.getEncoderLeft() < 1000 && flag == true) {
+////                drivetrain.driveDistanceMilli(1100);
+////            }
+////            while (drivetrain.getEncoderLeft() > 1000 || flag == false) {
+////                drivetrain.turnToAngle((i*90) + 90, 0.3);
+////                flag = false;
+////                if (drivetrain.read_gyro() > ((i*90) + 89) && drivetrain.read_gyro() < ((i*90) + 91)) {
+////                    flag = true;
+////                }
+////            }
+////            drivetrain.resetEncoders();
+////        }
+//
+//
+//
+////        if(drivetrain.getEncoderAvg() < 2000) {
+////            drivetrain.driveDistanceMilli(10000, 0.3);
+////            drivetrain.showDashboard();
+////        }
+////        else{
+////            drivetrain.turnToAngle(90, 0.3);
+////        }
+//
+    }
+
 
     @Override
     public void teleopInit()
@@ -53,51 +130,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledPeriodic() { }
-
-    @Override
-    public void autonomousPeriodic()
-    {
-        lift.showDashboard();
-        intake.showDashboard();
-        drivetrain.showDashboard();
-
-        drivetrain.turnToAngle(-500,0.5);
-
-//        drivetrain.gyroStraight(10,0.3);
-
-//        drivetrain.driveDistanceMilli(2000);
-//        drivetrain.driveDistanceMilli(2000);
-
-
-
-//        drivetrain.driveStraight(0.3,10000);
-
-
-//        for(int i = 0; i < 4; i++) {
-//            while (drivetrain.getEncoderLeft() < 1000 && flag == true) {
-//                drivetrain.driveDistanceMilli(1100);
-//            }
-//            while (drivetrain.getEncoderLeft() > 1000 || flag == false) {
-//                drivetrain.turnToAngle((i*90) + 90, 0.3);
-//                flag = false;
-//                if (drivetrain.read_gyro() > ((i*90) + 89) && drivetrain.read_gyro() < ((i*90) + 91)) {
-//                    flag = true;
-//                }
-//            }
-//            drivetrain.resetEncoders();
-//        }
-
-
-
-//        if(drivetrain.getEncoderAvg() < 2000) {
-//            drivetrain.driveDistanceMilli(10000, 0.3);
-//            drivetrain.showDashboard();
-//        }
-//        else{
-//            drivetrain.turnToAngle(90, 0.3);
-//        }
-
-    }
 
     @Override
     public void teleopPeriodic() {
