@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
         // We should receive information from the dashboard? (starting position)
 
         // choose a strategy
-        currentStrategy = strategy.strategyLeftRed();
+        currentStrategy = strategy.pickStrategy();
         currentStep = 0;
         currentStrategy[currentStep].begin(drivetrain);
     }
