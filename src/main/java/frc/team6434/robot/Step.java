@@ -1,13 +1,13 @@
 package frc.team6434.robot;
 
 
-public abstract class Command
+public abstract class Step
 {
     abstract void begin(Drivetrain drivetrain);
     abstract boolean progress(Drivetrain drivetrain);
 }
 
-class Straight extends Command{
+class Straight extends Step{
 
     double initialAngle;
     final double distance;
@@ -32,7 +32,7 @@ class Straight extends Command{
     }
 }
 
-class Turn extends Command{
+class Turn extends Step{
 
     final double targetAngle;
     final double speed;

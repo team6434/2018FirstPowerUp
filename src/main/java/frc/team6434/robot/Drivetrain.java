@@ -1,19 +1,11 @@
 package frc.team6434.robot;
 
-//import java.util.map;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain implements Subsystem {
-
-    //    double diff1 = leftEncoder.get - rightEncoder.get;
-//    double diffmap = map(diff1,-1000.0,1000.0,-1.0,1.0);
-    boolean flagon = true;
-    double optangle = 0.0;
-
-//    double minus = leftEncoder.get() - rightEncoder.get();
 
     public ADXRS450_Gyro gyro;
     VictorSP left, right;
@@ -41,36 +33,29 @@ public class Drivetrain implements Subsystem {
 
     //teleop driving stuff
     public void arcadeDrive(double x, double y) {
-        double left = y - x;
-        double right = y + x;
+        double left = y + x;
+        double right = y - x;
         if (left > 1) {
             left = 1;
         }
         if (right > 1) {
             right = 1;
         }
-        drive(left/2, right/2);
+        drive(-left/2, -right/2);
 
     }
 
+    public void resetGyro()
+    {
+       //to be done
+    }
 
-    //
-    public double readGyro() {
+
+    public double readGyro()
+    {
         return (gyro.getAngle() % 360 + 360) % 360;
     }
 
-
-//    public void restGyro(){
-//    }
-
-//    public void turnToAngle(double angle)
-//    {
-//
-//    }
-
-    public void resetGyro() {
-        // gyro.calibrate();
-    }
     //resets both encoders
     public void resetEncoders() {
         leftEncoder.reset();
@@ -79,33 +64,10 @@ public class Drivetrain implements Subsystem {
 
 
     //returns average of both encoders (mil)
-    public double getEncoderAvg() {
+    public double getEncoderAvg()
+    {
         return - constants.encoderRatio * (((rightEncoder.get()) + (leftEncoder.get())) / 2);
     }
-
-
-    //Drives a set distance in millimetres (roughly)
-    public void driveDistanceMilli(int milli, double speed, double targetAngle) {
-//        driveDistance(milli/2.4);
-        gyroStraight(milli / 2.4, speed, targetAngle);
-    }
-
-
-    // Drives a set distance, assuming the encoders have been reset.
-    // Reset the encoders once the robot has reached a target to drive a set distance again
-    // Right now only uses left encoder, and doesn't use the gyro to drive straight
-    public void driveDistance(double distance) {
-        if (leftEncoder.get() > distance) {
-            drive(-0.05, -0.05);
-        } else {
-            if (leftEncoder.get() < 0.7 * distance) {
-                drive(0.8, 0.8);
-            } else {
-                drive(0.3, 0.3);
-            }
-        }
-    }
-
 
 
     //drives straight using gyro
@@ -134,70 +96,7 @@ public class Drivetrain implements Subsystem {
         {
             drive(speed * secondSensitivity, speed);
         }
-
     }
-
-    //drives straight using gyro
-    public void gyroStraight(double distance, double speed, double targetAngle)
-    {
-        //sensitivit settings so you can change all 4 instances of it at once
-        final double firstSensitivity = 0.85;
-        final double secondSensitivity = 0.5;
-
-        if (flagon) {
-            flagon = false;
-            optangle = readGyro();
-        }
-        resetEncoders();
-        double avg_dis;
-        while ((avg_dis = getEncoderAvg()) < distance) {
-            SmartDashboard.putNumber("Gyro Angle", readGyro());
-            SmartDashboard.putNumber("Encoder Average", getEncoderAvg());
-            double error = calculateError(targetAngle);
-                if (error < -10) {
-                drive(speed, speed * secondSensitivity);
-            }
-            else if (error < 0)
-            {
-                drive(speed, speed * firstSensitivity);
-            }
-            else if (error < 10)
-            {
-                drive(speed * firstSensitivity, speed);
-            }
-            else
-            {
-                drive(speed * secondSensitivity, speed);
-            }
-//             if(optangle < readGyro())
-//             {
-//                 drive(speed*0.85, speed);
-//             }
-//             if(optangle > readGyro())
-//             {
-//                 drive(speed, speed*0.85);
-//             }
-//             else
-//             {
-//                 drive(speed,speed);
-//             }            
-//            if (error < 10 && error > 0)
-//                drive(speed * firstSensitivity, speed);
-//            if (optangle - readGyro() >= 10)
-//            drive(speed * secondSensitivity, speed);
-//            if (optangle - readGyro() > 10 && optangle - readGyro() < 0)
-//                drive(speed, speed * firstSensitivity);
-//            if (optangle - readGyro() <= 10)
-//            drive(speed, speed * secondSensitivity);
-//            if (optangle - readGyro() == 0)
-//                drive(speed, speed);
-        }
-        //stop at end of routine
-
-        drive(0, 0);
-
-    }
-
 
     public double calculateError(double targetAngle)
     {

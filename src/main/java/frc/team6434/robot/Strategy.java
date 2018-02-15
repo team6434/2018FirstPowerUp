@@ -1,6 +1,7 @@
 package frc.team6434.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Strategy implements Subsystem {
 
@@ -11,11 +12,18 @@ public class Strategy implements Subsystem {
     }
 
     public void init(){
-
+        SmartDashboard.putNumber("robotPosition", 0);
     }
 
-    public Command[] pickStrategy()
+    public Step[] pickStrategy()
     {
+        int robotPosition = (int)SmartDashboard.getNumber("robotPosition", 0);
+        if (robotPosition == 4)
+        {
+            // not a real position. Used for experimenting
+
+            return strategyTestSquare();
+        }
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
         if(gameData.length() == 0)
@@ -32,24 +40,39 @@ public class Strategy implements Subsystem {
 
     }
 
-    public Command[] strategyLeftRed()
+    public Step[] strategyLeftRed()
     {
-        return new Command[]{
+        SmartDashboard.putString("Strategy", "Left Red");
+        return new Step[]{
                 new Straight(3030, straightSpeed),
                 new Turn(-90, turnSpeed),
                 new Straight(1000, straightSpeed)
         };
     }
 
-    public Command[] strategyLeftBlue()
+    public Step[] strategyLeftBlue()
     {
-        return new Command[]{
+        SmartDashboard.putString("Strategy", "Left Blue");
+        return new Step[]{
                 new Straight(3030, straightSpeed),
                 new Turn(90, turnSpeed),
                 new Straight(1000, straightSpeed)
         };
     }
 
+    public Step[] strategyTestSquare() {
+        SmartDashboard.putString("Strategy", "Test Square");
+        return new Step[]{
+                new Straight(1000, straightSpeed),
+                new Turn(-90, turnSpeed),
+                new Straight(1000, straightSpeed),
+                new Turn(-180, turnSpeed),
+                new Straight(1000, straightSpeed),
+                new Turn(-270, turnSpeed),
+                new Straight(1000, straightSpeed),
+                new Turn(-360, turnSpeed)
+        };
+    }
     public void showDashboard()
     {
 
