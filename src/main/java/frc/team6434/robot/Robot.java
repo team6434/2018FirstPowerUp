@@ -1,9 +1,11 @@
 package frc.team6434.robot;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.CameraServer;
 import javafx.scene.Camera;
+
 
 public class Robot extends IterativeRobot {
 
@@ -21,7 +23,8 @@ public class Robot extends IterativeRobot {
     Strategy strategy;
 
     @Override
-    public void robotInit() {
+    public void robotInit()
+    {
         assistive_climb = new Assistive_Climb();
         drivetrain = new Drivetrain();
         joystick = new Joystick(0);
@@ -69,34 +72,27 @@ public class Robot extends IterativeRobot {
 
 
     @Override
-    public void teleopInit()
-    {
-
-    }
+    public void teleopInit() { }
 
     @Override
     public void testInit() { }
-
 
     @Override
     public void disabledPeriodic() { }
 
     @Override
-    public void teleopPeriodic() {
-
+    public void teleopPeriodic()
+    {
         lift.showDashboard();
         intake.showDashboard();
         drivetrain.showDashboard();
         SmartDashboard.putNumber("Throttle", joystick.getThrottle());
 
-
+        //Drivetrain
         drivetrain.arcadeDrive(joystick.getX(), joystick.getY());
 
-
-
         double speed = (joystick.getThrottle()+1)/2; //Throttle between 0 and 1
-
-
+        //Intake
         if (joystick.getRawButton(9))
         {
             intake.getCube(speed/2);
@@ -116,7 +112,7 @@ public class Robot extends IterativeRobot {
             intake.keepCube(0);
         }
 
-
+        //Lift
         if (joystick.getRawButton(11)) //Lift up
         {
             lift.moveLift(1);//speed);

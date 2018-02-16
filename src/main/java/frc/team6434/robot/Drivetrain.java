@@ -7,12 +7,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain implements Subsystem {
 
+    double lastError;
+
     public ADXRS450_Gyro gyro;
     VictorSP left, right;
     Encoder leftEncoder, rightEncoder;
-    double lastError;
 
-    public void init() {
+    public void init()
+    {
         left = new VictorSP(1);
         right = new VictorSP(0);
         leftEncoder = new Encoder(0, 1);
@@ -23,15 +25,13 @@ public class Drivetrain implements Subsystem {
         gyro.calibrate();
     }
 
-
     //sets the speeds of all driving motors
     public void drive(double leftSpeed, double rightSpeed) {
         left.set(leftSpeed);
         right.set(-rightSpeed);
     }
 
-
-    //teleop driving stuff
+    //teleop driving
     public void arcadeDrive(double x, double y) {
         double left = y + x;
         double right = y - x;
@@ -45,12 +45,13 @@ public class Drivetrain implements Subsystem {
 
     }
 
+    //Resets gyro
     public void resetGyro()
     {
        //to be done
     }
 
-
+    //reads gyro (between 0-360)
     public double readGyro()
     {
         return (gyro.getAngle() % 360 + 360) % 360;
@@ -62,16 +63,39 @@ public class Drivetrain implements Subsystem {
         rightEncoder.reset();
     }
 
-
     //returns average of both encoders (mil)
     public double getEncoderAvg()
     {
         return - constants.encoderRatio * (((rightEncoder.get()) + (leftEncoder.get())) / 2);
     }
 
+    public void distanceSensitivity(double leftSpeed, double rightSpeed, double currentDistance, double targetDistance)
+    {
+        final double firstSensitivity = 0.9;
+        final double secondSensitivity = 0.7;
+
+        if(currentDistance < 500){
+            drive(firstSensitivity*leftSpeed, firstSensitivity*rightSpeed);
+        }
+        else if(currentDistance < 1500){
+            drive(secondSensitivity*leftSpeed, secondSensitivity*rightSpeed);
+        }
+        else if((targetDistance - currentDistance) < 500)
+        {
+            drive(firstSensitivity*leftSpeed, firstSensitivity*rightSpeed);
+        }
+        else if((targetDistance - currentDistance) < 1500)
+        {
+            drive(secondSensitivity*leftSpeed, secondSensitivity*rightSpeed);
+        }
+        else
+        {
+            drive(leftSpeed, rightSpeed);
+        }
+    }
 
     //drives straight using gyro
-    public void driveStraight(double speed, double targetAngle)
+    public void driveStraight(double speed, double targetAngle, double currentDistance, double targetDistance)
     {
         //sensitivit settings so you can change all 4 instances of it at once
         final double firstSensitivity = 0.85;
@@ -82,22 +106,23 @@ public class Drivetrain implements Subsystem {
         SmartDashboard.putNumber("Encoder Average", getEncoderAvg());
         double error = calculateError(targetAngle);
         if (error < -10) {
-            drive(speed, speed * secondSensitivity);
+            distanceSensitivity(speed, speed * secondSensitivity, currentDistance, targetDistance);
         }
         else if (error < 0)
         {
-            drive(speed, speed * firstSensitivity);
+            distanceSensitivity(speed, speed * firstSensitivity, currentDistance, targetDistance);
         }
         else if (error < 10)
         {
-            drive(speed * firstSensitivity, speed);
+            distanceSensitivity(speed * firstSensitivity, speed, currentDistance, targetDistance);
         }
         else
         {
-            drive(speed * secondSensitivity, speed);
+            distanceSensitivity(speed * secondSensitivity, speed, currentDistance, targetDistance);
         }
     }
 
+    //calculates the error bewteen the target angle and the current angle
     public double calculateError(double targetAngle)
     {
         double error = readGyro() - targetAngle;
@@ -112,7 +137,7 @@ public class Drivetrain implements Subsystem {
         return error;
     }
 
-
+    //turns to specified angle
     public void turnToAngle(double targetAngle, double speed)
     {
         double error = calculateError(targetAngle);

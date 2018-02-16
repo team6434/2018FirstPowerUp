@@ -5,76 +5,139 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Strategy implements Subsystem {
 
-    private double straightSpeed = 0.5;
+    private double straightSpeed = 0.9;
     private double turnSpeed = 0.3;
-    public Strategy()
+
+    public Strategy() { }
+
+    public void init()
     {
+        SmartDashboard.putNumber("robotPosition", 1);
     }
 
-    public void init(){
-        SmartDashboard.putNumber("robotPosition", 0);
-    }
-
+    //logic for picking a strategy
     public Step[] pickStrategy()
     {
-        int robotPosition = (int)SmartDashboard.getNumber("robotPosition", 0);
-        if (robotPosition == 4)
-        {
-            // not a real position. Used for experimenting
-
-            return strategyTestSquare();
-        }
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
-        if(gameData.length() == 0)
+        int robotPosition = (int)SmartDashboard.getNumber("robotPosition", 0);
+
+        if (robotPosition == 1)
         {
-            gameData = "L";
+            if(Character.toUpperCase(gameData.charAt(0)) == 'L')
+            {
+                return oneLeft();
+            } else {
+                return oneRight();
+            }
+        }
+        else if (robotPosition == 2)
+        {
+            if(Character.toUpperCase(gameData.charAt(0)) == 'L')
+            {
+                return twoLeft();
+            } else {
+                return twoRight();
+            }
+        }
+        else if (robotPosition == 3)
+        {
+            if(Character.toUpperCase(gameData.charAt(0)) == 'L')
+            {
+                return threeLeft();
+            } else {
+                return threeRight();
+            }
+        }
+        else
+        {
+            return baseLine();
         }
 
-        if(Character.toUpperCase(gameData.charAt(0)) == 'L')
-        {
-            return strategyLeftRed();
-        } else {
-            return strategyLeftBlue();
-        }
-
+//        if(gameData.length() == 0)
+//        {
+//            gameData = "L";
+//        }
     }
 
-    public Step[] strategyLeftRed()
-    {
-        SmartDashboard.putString("Strategy", "Left Red");
-        return new Step[]{
-                new Straight(3030, straightSpeed),
-                new Turn(-90, turnSpeed),
-                new Straight(1000, straightSpeed)
-        };
-    }
 
-    public Step[] strategyLeftBlue()
+
+    public Step[] oneLeft() //DONE
     {
-        SmartDashboard.putString("Strategy", "Left Blue");
+        SmartDashboard.putString("Strategy", "1 Left");
         return new Step[]{
-                new Straight(3030, straightSpeed),
+                new Straight(4700, straightSpeed),
                 new Turn(90, turnSpeed),
-                new Straight(1000, straightSpeed)
+                new Straight(400, straightSpeed)
         };
     }
 
-    public Step[] strategyTestSquare() {
-        SmartDashboard.putString("Strategy", "Test Square");
+    public Step[] oneRight()
+    {
+        SmartDashboard.putString("Strategy", "1 Right");
+        return new Step[]{
+                new Straight(7000, straightSpeed),
+                new Turn(90, turnSpeed),
+                new Straight(8000, straightSpeed),
+                new Turn(180, turnSpeed),
+                new Straight(3500, straightSpeed),
+                new Turn(270, turnSpeed),
+                new Straight(500, straightSpeed)
+        };
+    }
+
+    public Step[] twoLeft()
+    {
+        SmartDashboard.putString("Strategy", "2 Left");
         return new Step[]{
                 new Straight(1000, straightSpeed),
                 new Turn(-90, turnSpeed),
                 new Straight(1000, straightSpeed),
-                new Turn(-180, turnSpeed),
-                new Straight(1000, straightSpeed),
-                new Turn(-270, turnSpeed),
-                new Straight(1000, straightSpeed),
-                new Turn(-360, turnSpeed)
+                new Turn(0, turnSpeed),
+                new Straight(2000, straightSpeed),
+                new Turn(90, turnSpeed),
+                new Straight(2000, straightSpeed),
+                new Turn(180, turnSpeed)
         };
     }
-    public void showDashboard()
-    {
 
+    public Step[] twoRight()
+    {
+        SmartDashboard.putString("Strategy", "2 Right");
+        return new Step[]{
+                new Straight(2000, straightSpeed),
+        };
     }
+
+    public Step[] threeLeft()
+    {
+        SmartDashboard.putString("Strategy", "3 Left");
+        return new Step[]{
+                new Straight(4000, straightSpeed),
+                new Turn(90, turnSpeed),
+                new Straight(2000, straightSpeed),
+                new Turn(180, turnSpeed),
+                new Straight(1000, straightSpeed)
+        };
+    }
+
+    public Step[] threeRight()
+    {
+        SmartDashboard.putString("Strategy", "3 Right");
+        return new Step[]{
+                new Straight(4700, straightSpeed),
+                new Turn(-90, turnSpeed),
+                new Straight(400, straightSpeed)
+        };
+    }
+
+    public Step[] baseLine()
+    {
+        SmartDashboard.putString("Strategy", "Base line");
+        return new Step[]{
+                new Straight(3030, straightSpeed)
+        };
+    }
+
+    public void showDashboard() { }
 }
