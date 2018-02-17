@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.CameraServer;
-import javafx.scene.Camera;
 
 
 public class Robot extends IterativeRobot {
@@ -17,7 +16,6 @@ public class Robot extends IterativeRobot {
     Assistive_Climb assistive_climb;
     Joystick joystick;
     Drivetrain drivetrain;
-    CameraServer cameraServer;
     Intake intake;
     Lift lift;
     Strategy strategy;
@@ -35,6 +33,8 @@ public class Robot extends IterativeRobot {
         lift.init();
         intake.init();
         strategy.init();
+        CameraServer.getInstance().startAutomaticCapture();
+
     }
 
     @Override
@@ -93,12 +93,12 @@ public class Robot extends IterativeRobot {
 
         double speed = (joystick.getThrottle()+1)/2; //Throttle between 0 and 1
         //Intake
-        if (joystick.getRawButton(9))
-        {
-            intake.getCube(speed/2);
-            holdCube = true;
-        }
-        else if (joystick.getRawButton(10))
+        if (joystick.getRawButton(2))
+            {
+                intake.getCube(speed);
+                holdCube = true;
+            }
+        else if (joystick.getRawButton(1))
         {
             intake.ejectCube(speed);
             holdCube = false;
@@ -112,14 +112,14 @@ public class Robot extends IterativeRobot {
             intake.keepCube(0);
         }
 
-        //Lift
-        if (joystick.getRawButton(11)) //Lift up
-        {
-            lift.moveLift(1);//speed);
-        }
-        else if (joystick.getRawButton(12)) //Lift down
-        {
-            lift.moveLift(-1);//speed);
+            //Lift
+            if (joystick.getRawButton(11)) //Lift up
+            {
+                lift.moveLift(0.6);//speed);
+            }
+            else if (joystick.getRawButton(12)) //Lift down
+            {
+                lift.moveLift(0.1);//speed);
         }
         else
         {

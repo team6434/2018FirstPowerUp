@@ -31,6 +31,6 @@ public class Lift implements Subsystem{
 
     public void showDashboard()
     {
-        // SmartDashboard.putNumber("Lift Motor Speed", liftMotor.get());
+        SmartDashboard.putNumber("Lift Motor Speed", liftMotor.get());
     }
 }

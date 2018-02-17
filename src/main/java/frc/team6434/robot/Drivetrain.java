@@ -33,21 +33,21 @@ public class Drivetrain implements Subsystem {
 
     //teleop driving
     public void arcadeDrive(double x, double y) {
-        double left = y + x;
-        double right = y - x;
+        double left = y - x;
+        double right = y + x;
         if (left > 1) {
             left = 1;
         }
         if (right > 1) {
             right = 1;
         }
-        drive(-left/2, -right/2);
-
+        drive(left, right);
     }
 
     //Resets gyro
     public void resetGyro()
     {
+        gyro.reset();
        //to be done
     }
 
