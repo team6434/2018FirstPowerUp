@@ -4,17 +4,15 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- * Created by jwill on 1/17/2018.
- */
 public class Lift implements Subsystem{
 
     VictorSP liftMotor;
-    DigitalInput liftLimitSwitchUpper, liftLimitSwitchLower;
+    DigitalInput limitSwitch;
 
     public void init()
     {
-        liftMotor = new VictorSP(4);
+        liftMotor = new VictorSP(2);
+//        limitSwitch = new DigitalInput(4);
     }
 
     //Move Lift (negative is up)
@@ -31,6 +29,6 @@ public class Lift implements Subsystem{
 
     public void showDashboard()
     {
-        // SmartDashboard.putNumber("Lift Motor Speed", liftMotor.get());
+        SmartDashboard.putNumber("Lift Motor Speed", liftMotor.get());
     }
 }

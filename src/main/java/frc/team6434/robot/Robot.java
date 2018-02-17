@@ -17,7 +17,6 @@ public class Robot extends IterativeRobot {
     Assistive_Climb assistive_climb;
     Joystick joystick;
     Drivetrain drivetrain;
-    CameraServer cameraServer;
     Intake intake;
     Lift lift;
     Strategy strategy;
@@ -35,6 +34,7 @@ public class Robot extends IterativeRobot {
         lift.init();
         intake.init();
         strategy.init();
+        CameraServer.getInstance().startAutomaticCapture();
     }
 
     @Override
@@ -48,19 +48,22 @@ public class Robot extends IterativeRobot {
 
         currentStrategy = strategy.pickStrategy();
         currentStep = 0;
-        currentStrategy[currentStep].begin(drivetrain);
+        currentStrategy[currentStep].begin(drivetrain, intake);
     }
 
     @Override
     public void autonomousPeriodic()
     {
         drivetrain.showDashboard();
+        intake.showDashboard();
+        lift.showDashboard();
+
         if (currentStep < currentStrategy.length) {
-            if (currentStrategy[currentStep].progress(drivetrain)) {
+            if (currentStrategy[currentStep].progress(drivetrain, intake)) {
                 currentStep = currentStep + 1;
                 if (currentStep < currentStrategy.length)
                 {
-                    currentStrategy[currentStep].begin(drivetrain);
+                    currentStrategy[currentStep].begin(drivetrain, intake);
                 }
                 else
                 {

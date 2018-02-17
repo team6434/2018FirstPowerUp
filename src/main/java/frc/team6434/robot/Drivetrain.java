@@ -15,8 +15,8 @@ public class Drivetrain implements Subsystem {
 
     public void init()
     {
-        left = new VictorSP(1);
         right = new VictorSP(0);
+        left = new VictorSP(1);
         leftEncoder = new Encoder(0, 1);
         leftEncoder.setDistancePerPulse(1);
         rightEncoder = new Encoder(2, 3);
@@ -33,8 +33,8 @@ public class Drivetrain implements Subsystem {
 
     //teleop driving
     public void arcadeDrive(double x, double y) {
-        double left = y + x;
-        double right = y - x;
+        double left = y - x;
+        double right = y + x;
         if (left > 1) {
             left = 1;
         }
@@ -69,6 +69,7 @@ public class Drivetrain implements Subsystem {
         return - constants.encoderRatio * (((rightEncoder.get()) + (leftEncoder.get())) / 2);
     }
 
+    //adjusts the speed based on how far has been driven
     public void distanceSensitivity(double leftSpeed, double rightSpeed, double currentDistance, double targetDistance)
     {
         final double firstSensitivity = 0.9;
@@ -101,9 +102,6 @@ public class Drivetrain implements Subsystem {
         final double firstSensitivity = 0.85;
         final double secondSensitivity = 0.5;
 
-
-        SmartDashboard.putNumber("Gyro Angle", readGyro());
-        SmartDashboard.putNumber("Encoder Average", getEncoderAvg());
         double error = calculateError(targetAngle);
         if (error < -10) {
             distanceSensitivity(speed, speed * secondSensitivity, currentDistance, targetDistance);
@@ -160,6 +158,7 @@ public class Drivetrain implements Subsystem {
         SmartDashboard.putNumber("Right Power", right.get());
         SmartDashboard.putNumber("Left Encoder", -leftEncoder.get() * constants.encoderRatio);
         SmartDashboard.putNumber("Right Encoder", -rightEncoder.get() * constants.encoderRatio);
+        SmartDashboard.putNumber("Encoder Average", getEncoderAvg());
         SmartDashboard.putNumber("Error", lastError);
 
 

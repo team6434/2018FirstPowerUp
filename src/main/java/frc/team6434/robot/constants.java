@@ -8,7 +8,7 @@ public class constants {
 
   
   //Drivetrain
-  public  static final double encoderRatio = 2.4;
+  public  static final double encoderRatio = 2.4; //supposed to convert to mil, idek anymore
   
   
   //Intake

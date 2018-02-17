@@ -49,6 +49,10 @@ public class Strategy implements Subsystem {
                 return threeRight();
             }
         }
+        else if (robotPosition == 4)
+        {
+            return testEject();
+        }
         else
         {
             return baseLine();
@@ -60,6 +64,14 @@ public class Strategy implements Subsystem {
 //        }
     }
 
+
+    public Step[] testEject()
+    {
+        SmartDashboard.putString("Strategy", "Test Eject");
+        return new Step[]{
+                new Eject(1)
+        };
+    }
 
 
     public Step[] oneLeft() //DONE

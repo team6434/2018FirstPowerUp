@@ -10,8 +10,8 @@ public class Intake {
     DigitalInput intakeLimitSwitch;
 
     public void init(){
-        intakeMotorLeft = new VictorSP(7);
-        intakeMotorRight = new VictorSP(8);
+        intakeMotorLeft = new VictorSP(4);
+        intakeMotorRight = new VictorSP(5);
     }
 
     //set speed of both intake motors
