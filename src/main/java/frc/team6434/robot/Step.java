@@ -1,6 +1,7 @@
 package frc.team6434.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public abstract class Step
 {
@@ -31,6 +32,7 @@ class Straight extends Step
     {
         if (drivetrain.getEncoderAvg()  > distance)
         {
+            drivetrain.drive(0,0);
             return true;
         }
         drivetrain.driveStraight(speed, initialAngle, drivetrain.getEncoderAvg(), distance);
@@ -59,6 +61,7 @@ class Turn extends Step
 
         if ((error  >  - tolerance) && (error  <  tolerance))
         {
+            drivetrain.drive(0,0);
             return true;
         }
         drivetrain.turnToAngle(targetAngle, speed);
@@ -70,18 +73,24 @@ class Turn extends Step
 //step for raising the lift
 class Raise extends Step
 {
+    Timer raiseTimer = new Timer();
 //    boolean limitSwitch = lift.limitSwitch;
 
     Raise(){}
 
-    void begin(Drivetrain drivetrain, Lift lift, Intake intake) { }
+    void begin(Drivetrain drivetrain, Lift lift, Intake intake)
+    {
+        raiseTimer.start();
+    }
 
     boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
     {
-//        if(limitSwitch.get = 1)
-//        {
-//            return true;
-//        }
+        SmartDashboard.putNumber("Raise Timer", raiseTimer.get());
+        if(raiseTimer.get() > 1.5)
+        {
+            lift.liftStop();
+            return true;
+        }
         lift.moveUp();
         return false;
     }
@@ -91,13 +100,9 @@ class Raise extends Step
 //step for ejecting the cube (2 secs)
 class Eject extends Step
 {
-    final double speed;
     Timer ejectTimer = new Timer();
 
-    Eject(double speed)
-    {
-        this.speed = speed;
-    }
+    Eject() {}
 
     void begin(Drivetrain drivetrain, Lift lift, Intake intake)
     {
@@ -106,11 +111,14 @@ class Eject extends Step
 
     boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
     {
-        if(ejectTimer.get() > 2.0)
+        SmartDashboard.putNumber("Eject Timer", ejectTimer.get());
+        if(ejectTimer.get() > 1.0)
         {
+            intake.intakeStop();
             return true;
         }
-        intake.ejectCube(speed);
+        lift.liftStop();
+        intake.ejectCubeFast();
         return false;
     }
 }

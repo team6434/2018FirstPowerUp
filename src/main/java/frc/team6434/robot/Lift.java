@@ -11,7 +11,7 @@ public class Lift implements Subsystem{
 
     public void init()
     {
-        liftMotor = new VictorSP(2);
+        liftMotor = new VictorSP(4);
 //        limitSwitch = new DigitalInput(4);
     }
 
@@ -22,18 +22,18 @@ public class Lift implements Subsystem{
 
     public void moveUp()
     {
-        setMotorSpeed(1);
+        setMotorSpeed(0.8);
     }
 
     public void moveDown()
     {
-        setMotorSpeed(0.05);
+        setMotorSpeed(-0.1);
     }
 
     //Stop lift at current position
     public void liftStop ()
     {
-        setMotorSpeed(0.2);
+        setMotorSpeed(0.15);
     }
 
     public void showDashboard()

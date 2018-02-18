@@ -77,8 +77,8 @@ public class Strategy implements Subsystem {
     public Step[] endOfStrat()
     {
         return new Step[]{
-//                new Raise()
-                new Eject(1)
+                new Raise(),
+                new Eject()
         };
     }
 
@@ -86,7 +86,7 @@ public class Strategy implements Subsystem {
     {
         SmartDashboard.putString("Strategy", "Test Eject");
         return new Step[]{
-                new Eject(1)
+               // new Eject(1)
         };
     }
 

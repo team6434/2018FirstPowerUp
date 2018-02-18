@@ -13,6 +13,7 @@ public class Robot extends IterativeRobot {
 
     int currentStep;
     boolean holdCube = false;
+    boolean fixCube = false;
     final double triggerThreshold = Constants.triggerThreshold;
 
     Assistive_Climb assistive_climb;
@@ -66,10 +67,6 @@ public class Robot extends IterativeRobot {
                 {
                     currentStrategy[currentStep].begin(drivetrain, lift, intake);
                 }
-                else
-                {
-                    drivetrain.drive(0, 0); // Stop
-                }
             }
         }
     }
@@ -98,33 +95,12 @@ public class Robot extends IterativeRobot {
         //Drivetrain
         drivetrain.arcadeDrive(controller.getX(LEFT), controller.getY(LEFT));
 
-
-        //Intake
-        if (controller.getTriggerAxis(RIGHT) > triggerThreshold)
-        {
-            intake.getCube(0.5);
-            holdCube = true;
-        }
-        else if (controller.getTriggerAxis(LEFT) > triggerThreshold)
-        {
-            intake.ejectCube(1);
-            holdCube = false;
-        }
-        else if (holdCube)
-        {
-            intake.keepCube(0.2);
-        }
-        else
-        {
-            intake.keepCube(0);
-        }
-
         //Lift
-        if (controller.getBumper(LEFT))
+        if (controller.getAButton())
         {
             lift.moveUp();
         }
-        else if (controller.getBumper(RIGHT))
+        else if (controller.getBButton())
         {
             lift.moveDown();
         }
@@ -133,7 +109,41 @@ public class Robot extends IterativeRobot {
             lift.liftStop();
         }
 
+        //Intake
+        if (controller.getBumper(LEFT))
+        {
+            fixCube = true;
+            intake.fixCube();
+        }
+        else
+        {
+            fixCube = false;
+            intake.stopFixCube();
+            if (controller.getTriggerAxis(LEFT) > triggerThreshold)
+            {
+                intake.getCube();
+                holdCube = true;
+            }
+            else if (controller.getTriggerAxis(RIGHT) > triggerThreshold)
+            {
+                intake.ejectCubeFast();
+                holdCube = false;
+            }
+            else if (controller.getBumper(RIGHT))
+            {
+                intake.ejectCubeSlow();
+                holdCube = false;
+            }
+            else if (holdCube)
+            {
+                intake.keepCube();
+            }
+            else
+            {
+                intake.intakeStop();
+            }
 
+        }
     }
 
     @Override

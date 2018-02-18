@@ -33,7 +33,11 @@ public class Drivetrain implements Subsystem {
     }
 
     //teleop driving
-    public void arcadeDrive(double x, double y) {
+    public void arcadeDrive(double x, double y)
+    {
+        x = x * Math.abs(x);
+        y = y * Math.abs(y);
+
         double left = y - x;
         double right = y + x;
         if (left > 1) {
