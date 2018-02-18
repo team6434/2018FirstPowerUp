@@ -17,6 +17,8 @@ public class Intake {
     //set speed of both intake motors
     private void intakeSpeed (double speed)
     {
+        SmartDashboard.putNumber("Intake speed:", speed);
+        
         intakeMotorLeft.set(speed);
         intakeMotorRight.set(speed);
     }

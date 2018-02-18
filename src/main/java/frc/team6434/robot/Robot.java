@@ -1,7 +1,8 @@
 package frc.team6434.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.CameraServer;
 import javafx.scene.Camera;
@@ -10,12 +11,12 @@ import javafx.scene.Camera;
 public class Robot extends IterativeRobot {
 
     Step[] currentStrategy;
-    int currentStep;
 
+    int currentStep;
     boolean holdCube = false;
 
     Assistive_Climb assistive_climb;
-    Joystick joystick;
+    XboxController controller;
     Drivetrain drivetrain;
     Intake intake;
     Lift lift;
@@ -26,7 +27,7 @@ public class Robot extends IterativeRobot {
     {
         assistive_climb = new Assistive_Climb();
         drivetrain = new Drivetrain();
-        joystick = new Joystick(0);
+        controller = new XboxController(0);
         drivetrain.init();
         intake = new Intake();
         lift = new Lift();
@@ -86,24 +87,27 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic()
     {
+        Hand kLeft = Hand.kLeft;
+        Hand kRight = Hand.kRight;
+
         lift.showDashboard();
         intake.showDashboard();
         drivetrain.showDashboard();
-        SmartDashboard.putNumber("Throttle", joystick.getThrottle());
+
 
         //Drivetrain
-        drivetrain.arcadeDrive(joystick.getX(), joystick.getY());
+        drivetrain.arcadeDrive(controller.getX(kLeft), controller.getY(kLeft));
 
-        double speed = (joystick.getThrottle()+1)/2; //Throttle between 0 and 1
+
         //Intake
-        if (joystick.getRawButton(9))
+        if (controller.getBumper(kLeft))
         {
-            intake.getCube(speed/2);
+            intake.getCube(0.5);
             holdCube = true;
         }
-        else if (joystick.getRawButton(10))
+        else if (controller.getBumper(kRight))
         {
-            intake.ejectCube(speed);
+            intake.ejectCube(1);
             holdCube = false;
         }
         else if (holdCube)
@@ -116,11 +120,11 @@ public class Robot extends IterativeRobot {
         }
 
         //Lift
-        if (joystick.getRawButton(11)) //Lift up
+        if (controller.getAButton()) //Lift up
         {
             lift.moveLift(1);//speed);
         }
-        else if (joystick.getRawButton(12)) //Lift down
+        else if (controller.getBButton()) //Lift down
         {
             lift.moveLift(-1);//speed);
         }
@@ -129,7 +133,7 @@ public class Robot extends IterativeRobot {
             lift.liftStop();
         }
 
-        SmartDashboard.putNumber("POV", joystick.getPOV());
+
     }
 
     @Override
