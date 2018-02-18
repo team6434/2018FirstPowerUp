@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.Timer;
 
 public abstract class Step
 {
-    abstract void begin(Drivetrain drivetrain, Intake intake);
-    abstract boolean progress(Drivetrain drivetrain, Intake intake);
+    abstract void begin(Drivetrain drivetrain, Lift lift, Intake intake);
+    abstract boolean progress(Drivetrain drivetrain, Lift lift, Intake intake);
 }
 
 //step for driving straight
@@ -21,13 +21,13 @@ class Straight extends Step
         this.speed = speed;
     }
 
-    void begin(Drivetrain drivetrain, Intake intake)
+    void begin(Drivetrain drivetrain, Lift lift, Intake intake)
     {
         drivetrain.resetEncoders();
         initialAngle = drivetrain.readGyro();
     }
 
-    boolean progress(Drivetrain drivetrain, Intake intake)
+    boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
     {
         if (drivetrain.getEncoderAvg()  > distance)
         {
@@ -51,9 +51,9 @@ class Turn extends Step
         this.speed = speed;
     }
 
-    void begin(Drivetrain drivetrain, Intake intake) { }
+    void begin(Drivetrain drivetrain, Lift lift, Intake intake) { }
 
-    boolean progress(Drivetrain drivetrain, Intake intake)
+    boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
     {
         double error = drivetrain.calculateError(targetAngle);
 
@@ -67,29 +67,25 @@ class Turn extends Step
 }
 
 
-////step for raising the lift
-//class Lift extends Step
-//{
-//    final double speed;
+//step for raising the lift
+class Raise extends Step
+{
 //    boolean limitSwitch = lift.limitSwitch;
-//
-//    Lift(double speed)
-//    {
-//        this.speed = speed;
-//    }
-//
-//    void begin(Drivetrain drivetrain, Intake intake) { }
-//
-//    boolean progress(Drivetrain drivetrain, Intake intake)
-//    {
+
+    Raise(){}
+
+    void begin(Drivetrain drivetrain, Lift lift, Intake intake) { }
+
+    boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
+    {
 //        if(limitSwitch.get = 1)
 //        {
 //            return true;
 //        }
-//        lift.moveLift(speed);
-//        return false;
-//    }
-//}
+        lift.moveUp();
+        return false;
+    }
+}
 
 
 //step for ejecting the cube (2 secs)
@@ -103,12 +99,12 @@ class Eject extends Step
         this.speed = speed;
     }
 
-    void begin(Drivetrain drivetrain, Intake intake)
+    void begin(Drivetrain drivetrain, Lift lift, Intake intake)
     {
         ejectTimer.start();
     }
 
-    boolean progress(Drivetrain drivetrain, Intake intake)
+    boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
     {
         if(ejectTimer.get() > 2.0)
         {

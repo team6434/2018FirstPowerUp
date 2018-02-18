@@ -15,16 +15,25 @@ public class Lift implements Subsystem{
 //        limitSwitch = new DigitalInput(4);
     }
 
-    //Move Lift (negative is up)
-    public void moveLift(double speed)
+    private void setMotorSpeed(double speed)
     {
         liftMotor.set(-speed);
     }
 
-    //Stop lift motor
+    public void moveUp()
+    {
+        setMotorSpeed(1);
+    }
+
+    public void moveDown()
+    {
+        setMotorSpeed(0.05);
+    }
+
+    //Stop lift at current position
     public void liftStop ()
     {
-        liftMotor.set(0);
+        setMotorSpeed(0.2);
     }
 
     public void showDashboard()

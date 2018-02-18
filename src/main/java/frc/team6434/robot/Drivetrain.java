@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Drivetrain implements Subsystem {
 
     double lastError;
+    final double encoderRatio = Constants.encoderRatio;
 
     public ADXRS450_Gyro gyro;
     VictorSP left, right;
@@ -66,7 +67,7 @@ public class Drivetrain implements Subsystem {
     //returns average of both encoders (mil)
     public double getEncoderAvg()
     {
-        return - constants.encoderRatio * (((rightEncoder.get()) + (leftEncoder.get())) / 2);
+        return - encoderRatio * (((rightEncoder.get()) + (leftEncoder.get())) / 2);
     }
 
     //adjusts the speed based on how far has been driven
@@ -156,8 +157,8 @@ public class Drivetrain implements Subsystem {
         SmartDashboard.putNumber("Gyro Angle", readGyro());
         SmartDashboard.putNumber("Left Power", left.get());
         SmartDashboard.putNumber("Right Power", right.get());
-        SmartDashboard.putNumber("Left Encoder", -leftEncoder.get() * constants.encoderRatio);
-        SmartDashboard.putNumber("Right Encoder", -rightEncoder.get() * constants.encoderRatio);
+        SmartDashboard.putNumber("Left Encoder", -leftEncoder.get() * encoderRatio);
+        SmartDashboard.putNumber("Right Encoder", -rightEncoder.get() * encoderRatio);
         SmartDashboard.putNumber("Encoder Average", getEncoderAvg());
         SmartDashboard.putNumber("Error", lastError);
 

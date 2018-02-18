@@ -15,8 +15,18 @@ public class Strategy implements Subsystem {
         SmartDashboard.putNumber("robotPosition", 1);
     }
 
-    //logic for picking a strategy
     public Step[] pickStrategy()
+    {
+        Step[] driveSteps = pickDrivingStrategy();
+        Step[] endSteps = endOfStrat();
+        Step[] combined = new Step[driveSteps.length + endSteps.length];
+        System.arraycopy(driveSteps, 0, combined, 0, driveSteps.length);
+        System.arraycopy(endSteps, 0, combined, driveSteps.length, endSteps.length);
+        return combined;
+    }
+
+    //logic for picking a strategy
+    public Step[] pickDrivingStrategy()
     {
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -64,6 +74,13 @@ public class Strategy implements Subsystem {
 //        }
     }
 
+    public Step[] endOfStrat()
+    {
+        return new Step[]{
+//                new Raise()
+                new Eject(1)
+        };
+    }
 
     public Step[] testEject()
     {

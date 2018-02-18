@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.CameraServer;
-import javafx.scene.Camera;
 
 
 public class Robot extends IterativeRobot {
@@ -14,6 +13,7 @@ public class Robot extends IterativeRobot {
 
     int currentStep;
     boolean holdCube = false;
+    final double triggerThreshold = Constants.triggerThreshold;
 
     Assistive_Climb assistive_climb;
     XboxController controller;
@@ -49,7 +49,7 @@ public class Robot extends IterativeRobot {
 
         currentStrategy = strategy.pickStrategy();
         currentStep = 0;
-        currentStrategy[currentStep].begin(drivetrain, intake);
+        currentStrategy[currentStep].begin(drivetrain, lift, intake);
     }
 
     @Override
@@ -60,11 +60,11 @@ public class Robot extends IterativeRobot {
         lift.showDashboard();
 
         if (currentStep < currentStrategy.length) {
-            if (currentStrategy[currentStep].progress(drivetrain, intake)) {
+            if (currentStrategy[currentStep].progress(drivetrain, lift, intake)) {
                 currentStep = currentStep + 1;
                 if (currentStep < currentStrategy.length)
                 {
-                    currentStrategy[currentStep].begin(drivetrain, intake);
+                    currentStrategy[currentStep].begin(drivetrain, lift, intake);
                 }
                 else
                 {
@@ -87,8 +87,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic()
     {
-        Hand kLeft = Hand.kLeft;
-        Hand kRight = Hand.kRight;
+        Hand LEFT = Hand.kLeft;
+        Hand RIGHT = Hand.kRight;
 
         lift.showDashboard();
         intake.showDashboard();
@@ -96,16 +96,16 @@ public class Robot extends IterativeRobot {
 
 
         //Drivetrain
-        drivetrain.arcadeDrive(controller.getX(kLeft), controller.getY(kLeft));
+        drivetrain.arcadeDrive(controller.getX(LEFT), controller.getY(LEFT));
 
 
         //Intake
-        if (controller.getBumper(kLeft))
+        if (controller.getTriggerAxis(RIGHT) > triggerThreshold)
         {
             intake.getCube(0.5);
             holdCube = true;
         }
-        else if (controller.getBumper(kRight))
+        else if (controller.getTriggerAxis(LEFT) > triggerThreshold)
         {
             intake.ejectCube(1);
             holdCube = false;
@@ -120,13 +120,13 @@ public class Robot extends IterativeRobot {
         }
 
         //Lift
-        if (controller.getAButton()) //Lift up
+        if (controller.getBumper(LEFT))
         {
-            lift.moveLift(1);//speed);
+            lift.moveUp();
         }
-        else if (controller.getBButton()) //Lift down
+        else if (controller.getBumper(RIGHT))
         {
-            lift.moveLift(-1);//speed);
+            lift.moveDown();
         }
         else
         {

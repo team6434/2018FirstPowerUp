@@ -1,14 +1,13 @@
 package frc.team6434.robot;
 
 import edu.wpi.first.wpilibj.VictorSP;
-import frc.team6434.robot.constants;
 
 public class Assistive_Climb {
 
     private VictorSP assistiveClimbMotorLeft, getAssistiveClimbMotorLeft;
     private VictorSP assistiveClimbMotorRight, getAssistiveClimbMotorRight;
 
-    double AMS = constants.AMS;
+    final double AMS = Constants.AMS;
 
     public void init()
     {
