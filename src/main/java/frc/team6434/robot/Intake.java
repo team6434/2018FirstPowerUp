@@ -33,13 +33,13 @@ public class Intake {
     //Get the cube
     public void getCube()
     {
-        intakeSpeed(0.5);
+        intakeSpeed(0.35);
     }
 
     //For keep in the cube while driving
     public void keepCube()
     {
-        intakeSpeed(0.2);
+        intakeSpeed(0.15);
     }
 
     //Ejects the cube fast

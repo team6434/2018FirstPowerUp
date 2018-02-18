@@ -11,7 +11,7 @@ public class Constants {
   public  static final double encoderRatio = 2.4; //supposed to convert to mil, idek anymore
 
   //Intake
-  public  static final double ejectTime = 0.1;
+  public  static final double ejectTime = 0.07;
   public  static final double intakeTime = 0.2;
 
   public  static final double triggerThreshold = 0.7;

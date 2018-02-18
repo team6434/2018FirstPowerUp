@@ -86,7 +86,7 @@ class Raise extends Step
     boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
     {
         SmartDashboard.putNumber("Raise Timer", raiseTimer.get());
-        if(raiseTimer.get() > 1.5)
+        if(raiseTimer.get() > 3)
         {
             lift.liftStop();
             return true;
@@ -118,7 +118,7 @@ class Eject extends Step
             return true;
         }
         lift.liftStop();
-        intake.ejectCubeFast();
+        intake.ejectCubeSlow();
         return false;
     }
 }

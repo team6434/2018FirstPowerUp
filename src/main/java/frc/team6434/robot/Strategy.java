@@ -15,18 +15,18 @@ public class Strategy implements Subsystem {
         SmartDashboard.putNumber("robotPosition", 1);
     }
 
-    public Step[] pickStrategy()
-    {
-        Step[] driveSteps = pickDrivingStrategy();
-        Step[] endSteps = endOfStrat();
-        Step[] combined = new Step[driveSteps.length + endSteps.length];
-        System.arraycopy(driveSteps, 0, combined, 0, driveSteps.length);
-        System.arraycopy(endSteps, 0, combined, driveSteps.length, endSteps.length);
-        return combined;
-    }
+//    public Step[] pickStrategy()
+//    {
+//        Step[] driveSteps = pickDrivingStrategy();
+//        Step[] endSteps = endOfStrat();
+//        Step[] combined = new Step[driveSteps.length + endSteps.length];
+//        System.arraycopy(driveSteps, 0, combined, 0, driveSteps.length);
+//        System.arraycopy(endSteps, 0, combined, driveSteps.length, endSteps.length);
+//        return combined;
+//    }
 
     //logic for picking a strategy
-    public Step[] pickDrivingStrategy()
+    public Step[] pickStrategy()
     {
         String gameData;
         gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -67,26 +67,22 @@ public class Strategy implements Subsystem {
         {
             return baseLine();
         }
-
-//        if(gameData.length() == 0)
-//        {
-//            gameData = "L";
-//        }
     }
 
-    public Step[] endOfStrat()
-    {
-        return new Step[]{
-                new Raise(),
-                new Eject()
-        };
-    }
+//    public Step[] endOfStrat()
+//    {
+//        return new Step[]{
+//                new Raise(),
+//                new Eject()
+//        };
+//    }
 
     public Step[] testEject()
     {
         SmartDashboard.putString("Strategy", "Test Eject");
         return new Step[]{
-               // new Eject(1)
+                new Raise(),
+                new Eject()
         };
     }
 

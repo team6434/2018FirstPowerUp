@@ -68,10 +68,11 @@ public class Drivetrain implements Subsystem {
         rightEncoder.reset();
     }
 
-    //returns average of both encoders (mil)
     public double getEncoderAvg()
     {
-        return - encoderRatio * (((rightEncoder.get()) + (leftEncoder.get())) / 2);
+//        return - encoderRatio * (((rightEncoder.get()) + (leftEncoder.get())) / 2);
+
+        return - encoderRatio *  (leftEncoder.get());
     }
 
     //adjusts the speed based on how far has been driven

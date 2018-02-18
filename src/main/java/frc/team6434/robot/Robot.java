@@ -96,11 +96,11 @@ public class Robot extends IterativeRobot {
         drivetrain.arcadeDrive(controller.getX(LEFT), controller.getY(LEFT));
 
         //Lift
-        if (controller.getAButton())
+        if (controller.getBButton())
         {
             lift.moveUp();
         }
-        else if (controller.getBButton())
+        else if (controller.getAButton())
         {
             lift.moveDown();
         }
@@ -126,12 +126,12 @@ public class Robot extends IterativeRobot {
             }
             else if (controller.getTriggerAxis(RIGHT) > triggerThreshold)
             {
-                intake.ejectCubeFast();
+                intake.ejectCubeSlow();
                 holdCube = false;
             }
             else if (controller.getBumper(RIGHT))
             {
-                intake.ejectCubeSlow();
+                intake.ejectCubeFast();
                 holdCube = false;
             }
             else if (holdCube)
