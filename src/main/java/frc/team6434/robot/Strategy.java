@@ -86,7 +86,7 @@ public class Strategy implements Subsystem {
     }
 
 
-    public Step[] oneLeft() //DONE
+    public Step[] oneLeft() //TESTED
     {
         SmartDashboard.putString("Strategy", "1 Left");
         return new Step[]{
@@ -98,6 +98,7 @@ public class Strategy implements Subsystem {
         };
     }
 
+    //ALMOST DONE
     public Step[] oneRight()
     {
         SmartDashboard.putString("Strategy", "1 Right");
@@ -136,25 +137,30 @@ public class Strategy implements Subsystem {
         };
     }
 
+
+    //NEEDS ADJUSTMENTS
     public Step[] threeLeft()
     {
         SmartDashboard.putString("Strategy", "3 Left");
         return new Step[]{
-                new Straight(4000, straightSpeed),
-                new Turn(90, turnSpeed),
-                new Straight(2000, straightSpeed),
-                new Turn(180, turnSpeed),
-                new Straight(1000, straightSpeed)
+                new Straight(5500, straightSpeed),
+                new Turn(-90, turnSpeed),
+                new Straight(6500, straightSpeed),
+                new Turn(-180, turnSpeed),
+                new Straight(2500, straightSpeed),
+                new Turn(-270, turnSpeed),
+                new StraightLift(1000, straightSpeed),
+                new Eject()
         };
     }
 
+    //ALMOST TESTED
     public Step[] threeRight()
     {
         SmartDashboard.putString("Strategy", "3 Right");
         return new Step[]{
-                new Straight(4700, straightSpeed),
+                new Straight(3200, straightSpeed),
                 new Turn(-90, turnSpeed),
-                new Straight(400, straightSpeed),
                 new StraightLift(500, 0.6),
                 new Eject()
         };
