@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Strategy implements Subsystem {
 
     private double straightSpeed = 0.9;
-    private double turnSpeed = 0.3;
+    private double turnSpeed = 0.6;
 
     public Strategy() { }
 
@@ -93,7 +93,7 @@ public class Strategy implements Subsystem {
                 new Straight(3200, straightSpeed),
                 new Turn(90, turnSpeed),
 //                new Straight(400, straightSpeed)
-                new StraightLift(600, straightSpeed),
+                new StraightLift(500, 0.6),
                 new Eject()
         };
     }
@@ -102,13 +102,13 @@ public class Strategy implements Subsystem {
     {
         SmartDashboard.putString("Strategy", "1 Right");
         return new Step[]{
-                new Straight(4200, straightSpeed),
+                new Straight(5500, straightSpeed),
                 new Turn(90, turnSpeed),
-                new Straight(5000, straightSpeed),
+                new Straight(6500, straightSpeed),
                 new Turn(180, turnSpeed),
-                new Straight(1500, straightSpeed),
+                new Straight(2500, straightSpeed),
                 new Turn(270, turnSpeed),
-                new StraightLift(400, 0.6),
+                new StraightLift(1000, straightSpeed),
                 new Eject()
         };
     }
@@ -154,7 +154,9 @@ public class Strategy implements Subsystem {
         return new Step[]{
                 new Straight(4700, straightSpeed),
                 new Turn(-90, turnSpeed),
-                new Straight(400, straightSpeed)
+                new Straight(400, straightSpeed),
+                new StraightLift(500, 0.6),
+                new Eject()
         };
     }
 
