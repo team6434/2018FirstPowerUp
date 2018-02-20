@@ -9,6 +9,7 @@ public abstract class Step
     abstract boolean progress(Drivetrain drivetrain, Lift lift, Intake intake);
 }
 
+
 //step for driving straight
 class Straight extends Step
 {
@@ -32,10 +33,63 @@ class Straight extends Step
     {
         if (drivetrain.getEncoderAvg()  > distance)
         {
+            intake.intakeStop();
             drivetrain.drive(0,0);
             return true;
         }
+        intake.getCube();
         drivetrain.driveStraight(speed, initialAngle, drivetrain.getEncoderAvg(), distance);
+        return false;
+    }
+}
+
+
+class StraightLift extends Step
+{
+    Timer raiseTimer = new Timer();
+    double initialAngle;
+    final double distance;
+    final double speed;
+    boolean flagOne;
+    boolean flagTwo;
+
+    StraightLift(double distance, double speed)
+    {
+        this.distance = distance;
+        this.speed = speed;
+    }
+
+    void begin(Drivetrain drivetrain, Lift lift, Intake intake)
+    {
+        drivetrain.resetEncoders();
+        initialAngle = drivetrain.readGyro();
+        flagOne = false;
+        flagTwo = false;
+        raiseTimer.start();
+    }
+
+    boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
+    {
+        if (drivetrain.getEncoderAvg()  > distance)
+        {
+            drivetrain.drive(0,0);
+            flagOne = true;
+        }
+        if(raiseTimer.get() > 3)
+        {
+            lift.liftStop();
+            flagTwo = true;
+        }
+        if(flagOne == true && flagTwo == true)
+        {
+            return true;
+        }
+        if(!flagTwo) {
+            lift.moveUpAuto();
+        }
+        if(!flagOne) {
+            drivetrain.driveStraight(speed, initialAngle, drivetrain.getEncoderAvg(), distance);
+        }
         return false;
     }
 }
@@ -45,7 +99,7 @@ class Turn extends Step
 {
     final double targetAngle;
     final double speed;
-    final double tolerance = 10;
+    final double tolerance = 3;
 
     Turn(double targetAngle, double speed)
     {
@@ -61,9 +115,11 @@ class Turn extends Step
 
         if ((error  >  - tolerance) && (error  <  tolerance))
         {
+            intake.intakeStop();
             drivetrain.drive(0,0);
             return true;
         }
+        intake.getCube();
         drivetrain.turnToAngle(targetAngle, speed);
         return false;
     }
@@ -121,4 +177,43 @@ class Eject extends Step
         intake.ejectCubeSlow();
         return false;
     }
+
+
+
+    //class LowerIntake extends Step
+//{
+//    final double forwardTime = Constants.forwardTime;
+//    final double backwardTime = Constants.backwardTime;
+//    Timer driveTimer = new Timer();
+////    boolean currentlyForward;
+//
+//    LowerIntake(){}
+//
+//    void begin(Drivetrain drivetrain, Lift lift, Intake intake)
+//    {
+////        currentlyForward = false;
+//        driveTimer.reset();
+//        driveTimer.start();
+//    }
+//
+//    boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
+//    {
+////        if (currentlyForward == false)
+////        {
+////            currentlyForward = true;
+////        }
+//        if(driveTimer.get() < forwardTime)
+//        {
+//            drivetrain.driveStraight(0.5, 0, drivetrain.getEncoderAvg(), )
+//        }
+//        else if (driveTimer.get() < forwardTime + backwardTime)
+//        {
+//            getCube();
+//        }
+//        else
+//        {
+//            keepCube();
+//        }
+//    }
+//}
 }

@@ -45,13 +45,13 @@ public class Intake {
     //Ejects the cube fast
     public void ejectCubeFast()
     {
-        intakeSpeed(-1);
+        intakeSpeed(-0.8);
     }
 
     //Ejects the cube slow
     public void ejectCubeSlow()
     {
-        intakeSpeed(-0.5);
+        intakeSpeed(-0.4);
     }
 
     //Stops intake

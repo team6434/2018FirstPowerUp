@@ -45,9 +45,9 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit()
     {
-        drivetrain.resetGyro();
         drivetrain.resetEncoders();
 
+        drivetrain.resetGyro();
         currentStrategy = strategy.pickStrategy();
         currentStep = 0;
         currentStrategy[currentStep].begin(drivetrain, lift, intake);
@@ -123,6 +123,10 @@ public class Robot extends IterativeRobot {
             {
                 intake.getCube();
                 holdCube = true;
+            }
+            else if (controller.getYButton())
+            {
+                holdCube = false;
             }
             else if (controller.getTriggerAxis(RIGHT) > triggerThreshold)
             {

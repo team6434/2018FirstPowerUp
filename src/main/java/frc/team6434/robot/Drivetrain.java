@@ -18,10 +18,10 @@ public class Drivetrain implements Subsystem {
     {
         right = new VictorSP(0);
         left = new VictorSP(1);
-        leftEncoder = new Encoder(0, 1);
-        leftEncoder.setDistancePerPulse(1);
         rightEncoder = new Encoder(2, 3);
         rightEncoder.setDistancePerPulse(1);
+        leftEncoder = new Encoder(0, 1);
+        leftEncoder.setDistancePerPulse(1);
         gyro = new ADXRS450_Gyro();
         gyro.calibrate();
     }
@@ -53,7 +53,7 @@ public class Drivetrain implements Subsystem {
     //Resets gyro
     public void resetGyro()
     {
-       //to be done
+       gyro.reset();
     }
 
     //reads gyro (between 0-360)
@@ -72,26 +72,26 @@ public class Drivetrain implements Subsystem {
     {
 //        return - encoderRatio * (((rightEncoder.get()) + (leftEncoder.get())) / 2);
 
-        return - encoderRatio *  (leftEncoder.get());
+        return ((encoderRatio * ((rightEncoder.get())/*+(leftEncoder.get())*/)) / -2);
     }
 
     //adjusts the speed based on how far has been driven
     public void distanceSensitivity(double leftSpeed, double rightSpeed, double currentDistance, double targetDistance)
     {
-        final double firstSensitivity = 0.9;
-        final double secondSensitivity = 0.7;
+        final double firstSensitivity = 0.6;
+        final double secondSensitivity = 0.9;
 
         if(currentDistance < 500){
             drive(firstSensitivity*leftSpeed, firstSensitivity*rightSpeed);
         }
-        else if(currentDistance < 1500){
+        else if(currentDistance < 1000){
             drive(secondSensitivity*leftSpeed, secondSensitivity*rightSpeed);
         }
-        else if((targetDistance - currentDistance) < 500)
+        else if((targetDistance - currentDistance) < 1000)
         {
             drive(firstSensitivity*leftSpeed, firstSensitivity*rightSpeed);
         }
-        else if((targetDistance - currentDistance) < 1500)
+        else if((targetDistance - currentDistance) < 2400)
         {
             drive(secondSensitivity*leftSpeed, secondSensitivity*rightSpeed);
         }
@@ -110,7 +110,7 @@ public class Drivetrain implements Subsystem {
 
         double error = calculateError(targetAngle);
         if (error < -10) {
-            distanceSensitivity(speed, speed * secondSensitivity, currentDistance, targetDistance);
+            distanceSensitivity(speed , speed* secondSensitivity, currentDistance, targetDistance);
         }
         else if (error < 0)
         {
@@ -145,13 +145,13 @@ public class Drivetrain implements Subsystem {
     public void turnToAngle(double targetAngle, double speed)
     {
         double error = calculateError(targetAngle);
-        if(error > 0)
+        if(error < 0)
         {
-            drive(-speed, speed);
+            drive(speed, -speed);
         }
         else
         {
-            drive(speed, -speed);
+            drive(-speed, speed);
         }
         this.lastError = error;
     }

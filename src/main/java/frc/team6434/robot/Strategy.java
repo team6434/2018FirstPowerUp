@@ -61,7 +61,7 @@ public class Strategy implements Subsystem {
         }
         else if (robotPosition == 4)
         {
-            return testEject();
+            return test();
         }
         else
         {
@@ -77,12 +77,11 @@ public class Strategy implements Subsystem {
 //        };
 //    }
 
-    public Step[] testEject()
+    public Step[] test()
     {
-        SmartDashboard.putString("Strategy", "Test Eject");
+        SmartDashboard.putString("Strategy", "Test");
         return new Step[]{
-                new Raise(),
-                new Eject()
+                new StraightLift(500,0.5)
         };
     }
 
@@ -91,9 +90,11 @@ public class Strategy implements Subsystem {
     {
         SmartDashboard.putString("Strategy", "1 Left");
         return new Step[]{
-                new Straight(4700, straightSpeed),
+                new Straight(3200, straightSpeed),
                 new Turn(90, turnSpeed),
-                new Straight(400, straightSpeed)
+//                new Straight(400, straightSpeed)
+                new StraightLift(600, straightSpeed),
+                new Eject()
         };
     }
 
@@ -101,13 +102,14 @@ public class Strategy implements Subsystem {
     {
         SmartDashboard.putString("Strategy", "1 Right");
         return new Step[]{
-                new Straight(7000, straightSpeed),
+                new Straight(4200, straightSpeed),
                 new Turn(90, turnSpeed),
-                new Straight(8000, straightSpeed),
+                new Straight(5000, straightSpeed),
                 new Turn(180, turnSpeed),
-                new Straight(3500, straightSpeed),
+                new Straight(1500, straightSpeed),
                 new Turn(270, turnSpeed),
-                new Straight(500, straightSpeed)
+                new StraightLift(400, 0.6),
+                new Eject()
         };
     }
 

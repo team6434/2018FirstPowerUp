@@ -20,5 +20,9 @@ public class Constants {
   
   //Lift
   
-  
+
+
+  //Step
+  public static final double forwardTime = 0.5;
+  public static final double backwardTime = 0.5;
 }
