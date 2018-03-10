@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Timer;
 
+import edu.wpi.first.wpilibj.Servo;
 
 public class Robot extends IterativeRobot {
 
@@ -22,6 +24,8 @@ public class Robot extends IterativeRobot {
     Intake intake;
     Lift lift;
     Strategy strategy;
+//    Timer astTimer;
+    Servo pin = new Servo(5);
 
     @Override
     public void robotInit()
@@ -33,6 +37,7 @@ public class Robot extends IterativeRobot {
         intake = new Intake();
         lift = new Lift();
         strategy = new Strategy();
+//        astTimer = new Timer();
         lift.init();
         intake.init();
         strategy.init();
@@ -73,7 +78,10 @@ public class Robot extends IterativeRobot {
 
 
     @Override
-    public void teleopInit() { }
+    public void teleopInit()
+    {
+        astTimer.start();
+    }
 
     @Override
     public void testInit() { }
@@ -84,6 +92,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic()
     {
+
         Hand LEFT = Hand.kLeft;
         Hand RIGHT = Hand.kRight;
 
@@ -124,10 +133,10 @@ public class Robot extends IterativeRobot {
                 intake.getCube();
                 holdCube = true;
             }
-            else if (controller.getYButton())
-            {
-                holdCube = false;
-            }
+//            else if (controller.getYButton())
+//            {
+//                holdCube = false;
+//            }
             else if (controller.getTriggerAxis(RIGHT) > triggerThreshold)
             {
                 intake.ejectCubeSlow();
@@ -146,11 +155,31 @@ public class Robot extends IterativeRobot {
             {
                 intake.intakeStop();
             }
-
         }
+
+
+        //Assitive Climb
+//        while ((astTimer.getMatchTime()) > 150)
+//        {
+        if (controller.getXButton())
+        {
+            pin.set(1);
+        }
+//        }
+
     }
 
     @Override
-    public void testPeriodic() {
+    public void testPeriodic()
+    {
+        if (controller.getXButton())
+        {
+            pin.set(0.8);
+//            assistive_climb.extend();
+        }
+        if (controller.getYButton())
+        {
+            pin.set(0.18);
+        }
     }
 }

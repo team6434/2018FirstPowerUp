@@ -2,7 +2,8 @@ package frc.team6434.robot;
 
 public class Constants {
   //Assistive Climb
-  public  static final double AMS = 0.5; //Assitive Motor Speed
+  public  static final double AMI = 0.17; //Assitive Motor In
+  public  static final double AMO = 0.82; //Assitive Motor Out
 
   //Climb
 

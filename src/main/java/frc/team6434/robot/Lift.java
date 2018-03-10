@@ -22,6 +22,7 @@ public class Lift implements Subsystem{
 
     public void moveUp()
     {
+//        setMotorSpeed(0.8);
         setMotorSpeed(0.8);
     }
 

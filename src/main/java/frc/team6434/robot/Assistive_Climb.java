@@ -1,44 +1,27 @@
 package frc.team6434.robot;
 
-import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.Servo;
 
 public class Assistive_Climb {
 
-    private VictorSP assistiveClimbMotorLeft, getAssistiveClimbMotorLeft;
-    private VictorSP assistiveClimbMotorRight, getAssistiveClimbMotorRight;
+    Servo linearActuator;
 
-    final double AMS = Constants.AMS;
+//    final double AMI = Constants.AMI;
+//    final double AMO = Constants.AMO;
 
     public void init()
     {
-        assistiveClimbMotorLeft = new VictorSP(9);
-        assistiveClimbMotorRight = new VictorSP(10);
+        linearActuator = new Servo(5);
     }
 
-    public void leftRelease()
+    public void extend()
     {
-        assistiveClimbMotorLeft.set(AMS);
+//        linearActuator.set(AMO);
+        linearActuator.set(0.5);
     }
 
-    public void rightRelease()
+    public void retract()
     {
-        assistiveClimbMotorRight.set(AMS);
+        linearActuator.set(0);
     }
-
-    public void bothRelease()
-    {
-        assistiveClimbMotorLeft.set(AMS);
-        assistiveClimbMotorRight.set(AMS);
-    }
-    
-    public void pullUpLeft()
-    {
-        assistiveClimbMotorLeft.set(-AMS);
-    }
-    
-    public void pullUpRight()
-    {
-        assistiveClimbMotorRight.set(-AMS);
-    }
-    
 }
