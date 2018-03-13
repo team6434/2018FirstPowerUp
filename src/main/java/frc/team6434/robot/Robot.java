@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
     Lift lift;
     Strategy strategy;
 //    Timer astTimer;
-    Servo pin = new Servo(5);
+    Servo pin = new Servo(3);
 
     @Override
     public void robotInit()
@@ -51,8 +51,8 @@ public class Robot extends IterativeRobot {
     public void autonomousInit()
     {
         drivetrain.resetEncoders();
-
         drivetrain.resetGyro();
+
         currentStrategy = strategy.pickStrategy();
         currentStep = 0;
         currentStrategy[currentStep].begin(drivetrain, lift, intake);
@@ -61,6 +61,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic()
     {
+        strategy.showDashboard();
         drivetrain.showDashboard();
         intake.showDashboard();
         lift.showDashboard();
@@ -80,14 +81,17 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopInit()
     {
-        astTimer.start();
+//        astTimer.start();
     }
 
     @Override
     public void testInit() { }
 
     @Override
-    public void disabledPeriodic() { }
+    public void disabledPeriodic()
+    {
+        strategy.showDashboard();
+    }
 
     @Override
     public void teleopPeriodic()
@@ -133,10 +137,10 @@ public class Robot extends IterativeRobot {
                 intake.getCube();
                 holdCube = true;
             }
-//            else if (controller.getYButton())
-//            {
-//                holdCube = false;
-//            }
+            else if (controller.getYButton())
+            {
+                holdCube = false;
+            }
             else if (controller.getTriggerAxis(RIGHT) > triggerThreshold)
             {
                 intake.ejectCubeSlow();
@@ -159,12 +163,12 @@ public class Robot extends IterativeRobot {
 
 
         //Assitive Climb
-//        while ((astTimer.getMatchTime()) > 150)
+//        if (controller.getXButton())
 //        {
-        if (controller.getXButton())
-        {
-            pin.set(1);
-        }
+//            assistive_climb.climbUp();
+//        }
+//        else {
+//            assistive_climb.climbStop();
 //        }
 
     }

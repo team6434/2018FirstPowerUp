@@ -33,7 +33,7 @@ public class Intake {
     //Get the cube
     public void getCube()
     {
-        intakeSpeed(0.35);
+        intakeSpeed(0.60);
     }
 
     //For keep in the cube while driving

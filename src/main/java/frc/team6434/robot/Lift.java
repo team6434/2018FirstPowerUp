@@ -23,7 +23,7 @@ public class Lift implements Subsystem{
     public void moveUp()
     {
 //        setMotorSpeed(0.8);
-        setMotorSpeed(0.8);
+        setMotorSpeed(0.7);
     }
 
     public void moveUpAuto()
@@ -39,7 +39,7 @@ public class Lift implements Subsystem{
     //Stop lift at current position
     public void liftStop ()
     {
-        setMotorSpeed(0.115);
+        setMotorSpeed(0.05);
     }
 
     public void showDashboard()

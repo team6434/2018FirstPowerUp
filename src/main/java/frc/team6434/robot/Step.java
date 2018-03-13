@@ -53,6 +53,9 @@ class StraightLift extends Step
     boolean flagOne;
     boolean flagTwo;
 
+    final double sw = 2;
+    final double lf = 5;
+
     StraightLift(double distance, double speed)
     {
         this.distance = distance;
@@ -75,7 +78,7 @@ class StraightLift extends Step
             drivetrain.drive(0,0);
             flagOne = true;
         }
-        if(raiseTimer.get() > 3)
+        if(raiseTimer.get() > sw)
         {
             lift.liftStop();
             flagTwo = true;
@@ -129,6 +132,9 @@ class Turn extends Step
 //step for raising the lift
 class Raise extends Step
 {
+    final double sw = 3;
+    final double lf = 5;
+
     Timer raiseTimer = new Timer();
 //    boolean limitSwitch = lift.limitSwitch;
 
@@ -142,7 +148,7 @@ class Raise extends Step
     boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
     {
         SmartDashboard.putNumber("Raise Timer", raiseTimer.get());
-        if(raiseTimer.get() > 3)
+        if(raiseTimer.get() > sw)
         {
             lift.liftStop();
             return true;
@@ -168,8 +174,9 @@ class Eject extends Step
     boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
     {
         SmartDashboard.putNumber("Eject Timer", ejectTimer.get());
-        if(ejectTimer.get() > 1.0)
+        if(ejectTimer.get() > 2.0)
         {
+            lift.liftStop();
             intake.intakeStop();
             return true;
         }
