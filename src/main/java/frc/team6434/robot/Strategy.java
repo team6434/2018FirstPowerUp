@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Strategy implements Subsystem {
 
-    private double straightSpeed = 1;
-    private double turnSpeed = 0.6;
+    private double straightSpeed = 0.75;
+    private double turnSpeed = 0.4;
 
     public Strategy() { }
 
@@ -43,6 +43,8 @@ public class Strategy implements Subsystem {
 //            }
 
 
+
+
         //LEFT
         if (robotPosition == 1)
         {
@@ -51,8 +53,8 @@ public class Strategy implements Subsystem {
 //                return baseLine();
                 return oneLeft();
             } else {
-//                return baseLine();
-                return oneRight();
+                return baseLine();
+//                return oneRight();
             }
         }
         //MIDDLE
@@ -72,8 +74,8 @@ public class Strategy implements Subsystem {
         {
             if(Character.toUpperCase(gameData.charAt(0)) == 'L')
             {
-//                return baseLine();
-                return threeLeft();
+                return baseLine();
+//                return threeLeft();
             } else {
 //                return baseLine();
                 return threeRight();
@@ -100,6 +102,7 @@ public class Strategy implements Subsystem {
     {
         SmartDashboard.putString("Strategy", "Test");
         return new Step[]{
+                new Straight(400, straightSpeed),
                 new StraightLift(500,0.5),
                 new Eject(),
                 new Eject()
@@ -113,8 +116,8 @@ public class Strategy implements Subsystem {
         return new Step[]{
                 new Straight(3200, straightSpeed),
                 new Turn(90, turnSpeed),
-//                new Straight(400, straightSpeed)
-                new StraightLift(500, 0.6),
+                new Straight(400, straightSpeed),
+                new StraightLift(100, 0.6),
                 new Eject(),
                 new Eject()
         };
@@ -189,7 +192,8 @@ public class Strategy implements Subsystem {
         return new Step[]{
                 new Straight(3200, straightSpeed),
                 new Turn(-90, turnSpeed),
-                new StraightLift(400, 0.6),
+                new Straight(400, straightSpeed),
+                new StraightLift(100, 0.6),
                 new Eject(),
                 new Eject()
         };

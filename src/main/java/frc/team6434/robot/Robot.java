@@ -24,7 +24,7 @@ public class Robot extends IterativeRobot {
     Intake intake;
     Lift lift;
     Strategy strategy;
-//    Timer astTimer;
+    Timer t1, t2;
     Servo pin = new Servo(3);
 
     @Override
@@ -33,13 +33,15 @@ public class Robot extends IterativeRobot {
         assistive_climb = new Assistive_Climb();
         drivetrain = new Drivetrain();
         controller = new XboxController(0);
-        drivetrain.init();
         intake = new Intake();
         lift = new Lift();
         strategy = new Strategy();
-//        astTimer = new Timer();
+        t1 = new Timer();
+        t2 = new Timer();
+        drivetrain.init();
         lift.init();
         intake.init();
+//        assistive_climb.init();
         strategy.init();
         CameraServer.getInstance().startAutomaticCapture();
     }
@@ -111,11 +113,25 @@ public class Robot extends IterativeRobot {
         //Lift
         if (controller.getBButton())
         {
+//            t1.start();
             lift.moveUp();
+//            if (t1.get() >= 3)
+//            {
+//                lift.liftStop();
+//                t1.stop();
+//                t2.reset();
+//            }
         }
         else if (controller.getAButton())
         {
+//            t2.start();
             lift.moveDown();
+//            if (t2.get() >= 3)
+//            {
+//                lift.liftStop();
+//                t2.stop();
+//                t1.reset();
+//            }
         }
         else
         {
@@ -163,6 +179,18 @@ public class Robot extends IterativeRobot {
 
 
         //Assitive Climb
+
+        if ((controller.getRawButton(7)) && (controller.getRawButton(8)))
+        {
+            pin.set(0.18);
+//            assistive_climb.extend();
+        }
+        if (controller.getXButton()) {
+            pin.set(0.8);
+        }
+
+
+
 //        if (controller.getXButton())
 //        {
 //            assistive_climb.climbUp();
@@ -185,5 +213,7 @@ public class Robot extends IterativeRobot {
         {
             pin.set(0.18);
         }
+        strategy.showDashboard();
+
     }
 }

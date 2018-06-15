@@ -33,11 +33,11 @@ class Straight extends Step
     {
         if (drivetrain.getEncoderAvg()  > distance)
         {
-            intake.intakeStop();
+//            intake.intakeStop();
             drivetrain.drive(0,0);
             return true;
         }
-        intake.getCube();
+//        intake.getCube();
         drivetrain.driveStraight(speed, initialAngle, drivetrain.getEncoderAvg(), distance);
         return false;
     }
