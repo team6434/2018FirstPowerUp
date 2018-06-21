@@ -12,6 +12,8 @@
       <entry name="!?*.groovy" />
     </wildcardResourcePatterns>
     <bytecodeTargetLevel target="1.8">
+      <module name="2018FirstPowerUp_main" target="1.8" />
+      <module name="2018FirstPowerUp_test" target="1.8" />
       <module name="java_main" target="1.8" />
       <module name="java_test" target="1.8" />
     </bytecodeTargetLevel>
@@ -79,9 +81,12 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/2018FirstPowerUp.iml" filepath="$PROJECT_DIR$/2018FirstPowerUp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/2018FirstPowerUp_main.iml" filepath="$PROJECT_DIR$/2018FirstPowerUp_main.iml" group="2018FirstPowerUp" />
+      <module fileurl="file://$PROJECT_DIR$/2018FirstPowerUp_test.iml" filepath="$PROJECT_DIR$/2018FirstPowerUp_test.iml" group="2018FirstPowerUp" />
       <module fileurl="file://$PROJECT_DIR$/java.iml" filepath="$PROJECT_DIR$/java.iml" />
-      <module fileurl="file://$PROJECT_DIR$/java_main.iml" filepath="$PROJECT_DIR$/java_main.iml" group="java" />
-      <module fileurl="file://$PROJECT_DIR$/java_test.iml" filepath="$PROJECT_DIR$/java_test.iml" group="java" />
+      <module fileurl="file://$PROJECT_DIR$/java_main.iml" filepath="$PROJECT_DIR$/java_main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java_test.iml" filepath="$PROJECT_DIR$/java_test.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">

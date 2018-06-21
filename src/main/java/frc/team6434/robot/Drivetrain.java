@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class Drivetrain implements Subsystem {
 
     double lastError;
+    final double encoderRatio = Constants.encoderRatio;
 
     public ADXRS450_Gyro gyro;
     VictorSP left, right;
@@ -17,10 +17,10 @@ public class Drivetrain implements Subsystem {
     {
         right = new VictorSP(0);
         left = new VictorSP(1);
-        leftEncoder = new Encoder(0, 1);
-        leftEncoder.setDistancePerPulse(1);
         rightEncoder = new Encoder(2, 3);
         rightEncoder.setDistancePerPulse(1);
+        leftEncoder = new Encoder(0, 1);
+        leftEncoder.setDistancePerPulse(1);
         gyro = new ADXRS450_Gyro();
         gyro.calibrate();
     }
@@ -32,7 +32,11 @@ public class Drivetrain implements Subsystem {
     }
 
     //teleop driving
-    public void arcadeDrive(double x, double y) {
+    public void arcadeDrive(double x, double y)
+    {
+        x = x * Math.abs(x);
+        y = y * Math.abs(y);
+
         double left = y - x;
         double right = y + x;
         if (left > 1) {
@@ -41,14 +45,14 @@ public class Drivetrain implements Subsystem {
         if (right > 1) {
             right = 1;
         }
-        drive(-left/2, -right/2);
+        drive(-left/1.35, -right/1.35);
 
     }
 
     //Resets gyro
     public void resetGyro()
     {
-       //to be done
+       gyro.reset();
     }
 
     //reads gyro (between 0-360)
@@ -63,29 +67,30 @@ public class Drivetrain implements Subsystem {
         rightEncoder.reset();
     }
 
-    //returns average of both encoders (mil)
     public double getEncoderAvg()
     {
-        return - constants.encoderRatio * (((rightEncoder.get()) + (leftEncoder.get())) / 2);
+//        return - encoderRatio * (((rightEncoder.get()) + (leftEncoder.get())) / 2);
+
+        return ((encoderRatio * ((rightEncoder.get())/*+(leftEncoder.get())*/)) / -2);
     }
 
     //adjusts the speed based on how far has been driven
     public void distanceSensitivity(double leftSpeed, double rightSpeed, double currentDistance, double targetDistance)
     {
-        final double firstSensitivity = 0.9;
-        final double secondSensitivity = 0.7;
+        final double firstSensitivity = 0.6;
+        final double secondSensitivity = 0.9;
 
         if(currentDistance < 500){
             drive(firstSensitivity*leftSpeed, firstSensitivity*rightSpeed);
         }
-        else if(currentDistance < 1500){
+        else if(currentDistance < 1000){
             drive(secondSensitivity*leftSpeed, secondSensitivity*rightSpeed);
         }
-        else if((targetDistance - currentDistance) < 500)
+        else if((targetDistance - currentDistance) < 1000)
         {
             drive(firstSensitivity*leftSpeed, firstSensitivity*rightSpeed);
         }
-        else if((targetDistance - currentDistance) < 1500)
+        else if((targetDistance - currentDistance) < 2400)
         {
             drive(secondSensitivity*leftSpeed, secondSensitivity*rightSpeed);
         }
@@ -104,7 +109,7 @@ public class Drivetrain implements Subsystem {
 
         double error = calculateError(targetAngle);
         if (error < -10) {
-            distanceSensitivity(speed, speed * secondSensitivity, currentDistance, targetDistance);
+            distanceSensitivity(speed , speed* secondSensitivity, currentDistance, targetDistance);
         }
         else if (error < 0)
         {
@@ -139,13 +144,13 @@ public class Drivetrain implements Subsystem {
     public void turnToAngle(double targetAngle, double speed)
     {
         double error = calculateError(targetAngle);
-        if(error > 0)
+        if(error < 0)
         {
-            drive(-speed, speed);
+            drive(speed, -speed);
         }
         else
         {
-            drive(speed, -speed);
+            drive(-speed, speed);
         }
         this.lastError = error;
     }
@@ -156,8 +161,7 @@ public class Drivetrain implements Subsystem {
         SmartDashboard.putNumber("Gyro Angle", readGyro());
         SmartDashboard.putNumber("Left Power", left.get());
         SmartDashboard.putNumber("Right Power", right.get());
-        SmartDashboard.putNumber("Left Encoder", -leftEncoder.get() * constants.encoderRatio);
-        SmartDashboard.putNumber("Right Encoder", -rightEncoder.get() * constants.encoderRatio);
+        SmartDashboard.putNumber("Right Encoder", -rightEncoder.get() * encoderRatio);
         SmartDashboard.putNumber("Encoder Average", getEncoderAvg());
         SmartDashboard.putNumber("Error", lastError);
 
