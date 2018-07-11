@@ -45,7 +45,8 @@ public class Drivetrain implements Subsystem {
         if (right > 1) {
             right = 1;
         }
-        drive(-left/1.35, -right/1.35);
+        drive(-left/0.8, -right/0.8);
+        //1.35 for comp
 
     }
 
