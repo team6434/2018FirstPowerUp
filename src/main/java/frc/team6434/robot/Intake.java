@@ -3,12 +3,17 @@ package frc.team6434.robot;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake {
 
     VictorSP intakeMotorLeft, intakeMotorRight;
     DigitalInput intakeLimitSwitch;
+    DoubleSolenoid ruby;
+
+
+
 
     final double ejectTime = Constants.ejectTime;
     final double intakeTime = Constants.intakeTime;
@@ -17,6 +22,7 @@ public class Intake {
 
     public void init()
     {
+        ruby = new DoubleSolenoid(2,3);
         intakeMotorLeft = new VictorSP(7);
         intakeMotorRight = new VictorSP(8);
     }
@@ -33,6 +39,7 @@ public class Intake {
     //Get the cube
     public void getCube()
     {
+        ruby.set(DoubleSolenoid.Value.kReverse);
         intakeSpeed(0.60);
     }
 
@@ -46,6 +53,7 @@ public class Intake {
     public void ejectCubeFast()
     {
         intakeSpeed(-0.8);
+        ruby.set(DoubleSolenoid.Value.kForward);
     }
 
     //Ejects the cube slow
