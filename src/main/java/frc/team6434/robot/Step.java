@@ -13,8 +13,6 @@ public abstract class Step
 //step for driving straight
 class Straight extends Step
 {
-    Timer straightTimer = new Timer();
-
     double initialAngle;
     final double distance;
     final double speed;
@@ -27,22 +25,77 @@ class Straight extends Step
 
     void begin(Drivetrain drivetrain, Lift lift, Intake intake)
     {
-        straightTimer.start();
+        drivetrain.resetEncoders();
         initialAngle = drivetrain.readGyro();
     }
 
     boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
     {
-        if (straightTimer.get()  > distance)
+        if (drivetrain.getEncoderAvg()  > distance)
         {
+            intake.intakeStop();
             drivetrain.drive(0,0);
             return true;
         }
+        intake.getCube();
         drivetrain.driveStraight(speed, initialAngle, drivetrain.getEncoderAvg(), distance);
         return false;
     }
 }
 
+
+class StraightLift extends Step
+{
+    Timer raiseTimer = new Timer();
+    double initialAngle;
+    final double distance;
+    final double speed;
+    boolean flagOne;
+    boolean flagTwo;
+
+    final double sw = 2;
+    final double lf = 5;
+
+    StraightLift(double distance, double speed)
+    {
+        this.distance = distance;
+        this.speed = speed;
+    }
+
+    void begin(Drivetrain drivetrain, Lift lift, Intake intake)
+    {
+        drivetrain.resetEncoders();
+        initialAngle = drivetrain.readGyro();
+        flagOne = false;
+        flagTwo = false;
+        raiseTimer.start();
+    }
+
+    boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
+    {
+        if (drivetrain.getEncoderAvg()  > distance)
+        {
+            drivetrain.drive(0,0);
+            flagOne = true;
+        }
+        if(raiseTimer.get() > sw)
+        {
+            lift.liftStop();
+            flagTwo = true;
+        }
+        if(flagOne == true && flagTwo == true)
+        {
+            return true;
+        }
+        if(!flagTwo) {
+            lift.moveUpAuto();
+        }
+        if(!flagOne) {
+            drivetrain.driveStraight(speed, initialAngle, drivetrain.getEncoderAvg(), distance);
+        }
+        return false;
+    }
+}
 
 //step for turning
 class Turn extends Step
@@ -76,27 +129,98 @@ class Turn extends Step
 }
 
 
+//step for raising the lift
+class Raise extends Step
+{
+    final double sw = 3;
+    final double lf = 5;
+
+    Timer raiseTimer = new Timer();
+//    boolean limitSwitch = lift.limitSwitch;
+
+    Raise(){}
+
+    void begin(Drivetrain drivetrain, Lift lift, Intake intake)
+    {
+        raiseTimer.start();
+    }
+
+    boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
+    {
+        SmartDashboard.putNumber("Raise Timer", raiseTimer.get());
+        if(raiseTimer.get() > sw)
+        {
+            lift.liftStop();
+            return true;
+        }
+        lift.moveUp();
+        return false;
+    }
+}
+
 
 //step for ejecting the cube (2 secs)
 class Eject extends Step
 {
-    boolean flag = false;
+    Timer ejectTimer = new Timer();
 
     Eject() {}
 
     void begin(Drivetrain drivetrain, Lift lift, Intake intake)
-    { }
+    {
+        ejectTimer.start();
+    }
 
     boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
     {
-        if(flag == true)
+        SmartDashboard.putNumber("Eject Timer", ejectTimer.get());
+        if(ejectTimer.get() > 2.0)
         {
+            lift.liftStop();
             intake.intakeStop();
             return true;
         }
-        intake.ejectCubeFast();
-        flag = true;
+        lift.liftStop();
+        intake.ejectCubeSlow();
         return false;
     }
 
+
+
+//    class LowerIntake extends Step
+//{
+//    final double forwardTime = Constants.forwardTime;
+//    final double backwardTime = Constants.backwardTime;
+//    Timer driveTimer = new Timer();
+////    boolean currentlyForward;
+//
+//    LowerIntake(){}
+//
+//    void begin(Drivetrain drivetrain, Lift lift, Intake intake)
+//    {
+////        currentlyForward = false;
+//        driveTimer.reset();
+//        driveTimer.start();
+//    }
+//
+//    boolean progress(Drivetrain drivetrain, Lift lift, Intake intake)
+//    {
+////        if (currentlyForward == false)
+////        {
+////            currentlyForward = true;
+////        }
+//        if(driveTimer.get() < forwardTime)
+//        {
+//            drivetrain.driveStraight(0.5, 0, drivetrain.getEncoderAvg(), )
+//        }
+//        else if (driveTimer.get() < forwardTime + backwardTime)
+//        {
+//            getCube();
+//        }
+//        else
+//        {
+//            keepCube();
+//        }
+//    }
+//}
 }

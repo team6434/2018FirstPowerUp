@@ -33,13 +33,13 @@ public class Lift implements Subsystem{
 
     public void moveDown()
     {
-        setMotorSpeed(-0.3);
+        setMotorSpeed(-0.4);
     }
 
     //Stop lift at current position
     public void liftStop ()
     {
-        setMotorSpeed(0.08);
+        setMotorSpeed(0.05);
     }
 
     public void showDashboard()

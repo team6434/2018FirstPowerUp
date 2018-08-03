@@ -45,8 +45,7 @@ public class Drivetrain implements Subsystem {
         if (right > 1) {
             right = 1;
         }
-        drive(-left/0.8, -right/0.8);
-        //1.35 for comp
+        drive(-left/1.2, -right/1.2);
 
     }
 
@@ -162,6 +161,7 @@ public class Drivetrain implements Subsystem {
         SmartDashboard.putNumber("Gyro Angle", readGyro());
         SmartDashboard.putNumber("Left Power", left.get());
         SmartDashboard.putNumber("Right Power", right.get());
+        SmartDashboard.putNumber("Left Encoder", -leftEncoder.get() * encoderRatio);
         SmartDashboard.putNumber("Right Encoder", -rightEncoder.get() * encoderRatio);
         SmartDashboard.putNumber("Encoder Average", getEncoderAvg());
         SmartDashboard.putNumber("Error", lastError);
